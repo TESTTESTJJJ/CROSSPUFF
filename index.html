@@ -59,82 +59,108 @@
     }
     #products {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 20px;
-      padding: 20px;
+      padding: 30px;
       max-width: 1200px;
       margin: 0 auto;
     }
     .product-card {
       background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 0 10px #ccc;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       padding: 15px;
-      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .product-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+    .product-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #3a70e1;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: bold;
     }
     .product-name {
       font-weight: bold;
-      margin-top: 10px;
+      font-size: 1rem;
+      margin: 10px 0 5px;
+    }
+    .product-rating {
+      font-size: 0.9rem;
+      color: #f2b01e;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
     .product-price {
-      margin: 8px 0;
-      color: #00aa66;
       font-weight: bold;
+      font-size: 1.1rem;
+      color: #0066cc;
+    }
+    .product-old-price {
+      text-decoration: line-through;
+      color: #aaa;
+      margin-right: 8px;
     }
     .add-btn {
-      background: #00ff99;
+      background: #00cc88;
       border: none;
       padding: 8px 16px;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
-      color: #121212;
+      color: white;
+      margin-top: 10px;
     }
-    #cart-modal {
-      display: none;
+    #signupModal {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.7);
-      justify-content: center;
-      align-items: center;
-    }
-    #cart-content {
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 500px;
-    }
-    .cart-item {
-      margin-bottom: 10px;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.5);
       display: flex;
-      justify-content: space-between;
-    }
-    #signup-modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      display: none;
     }
-    #signup-form {
-      background: #fff;
+    #signupForm {
+      background: white;
       padding: 30px;
       border-radius: 10px;
       max-width: 400px;
-      width: 90%;
-    }
-    #signup-form input {
       width: 100%;
-      margin-bottom: 10px;
+    }
+    #signupForm input {
+      display: block;
+      width: 100%;
       padding: 10px;
-      border: 1px solid #ccc;
+      margin: 10px 0;
       border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    #signupForm button {
+      background: #00cc88;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -160,117 +186,80 @@
 
   <div id="products"></div>
 
-  <div id="cart-modal">
-    <div id="cart-content">
-      <h3>Votre panier</h3>
-      <div id="cart-items"></div>
-      <div id="paypal-button-container"></div>
-      <button onclick="closeCart()" class="cart-btn" style="margin-top:15px;">Fermer</button>
-    </div>
-  </div>
-
-  <div id="signup-modal">
-    <form id="signup-form" onsubmit="sendSignup(event)">
-      <h3>Créer un compte</h3>
-      <input type="text" name="name" placeholder="Nom" required />
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="password" name="password" placeholder="Mot de passe" required />
-      <button type="submit" class="cart-btn">S'inscrire</button>
-      <button type="button" class="cart-btn" style="background:#ccc;margin-top:10px" onclick="closeSignup()">Annuler</button>
+  <div id="signupModal">
+    <form id="signupForm" onsubmit="sendSignup(event)">
+      <h3>Inscription</h3>
+      <input type="text" name="name" placeholder="Nom" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <button type="submit">S'inscrire</button>
     </form>
   </div>
 
   <script>
-    emailjs.init("user_XXXXXXX"); // remplace avec ton user ID emailjs
+    emailjs.init("user_fictiveKEY123");
+
+    function openSignup() {
+      document.getElementById('signupModal').style.display = 'flex';
+    }
+
+    function sendSignup(e) {
+      e.preventDefault();
+      emailjs.send("default_service", "template_signup", {
+        name: e.target.name.value,
+        email: e.target.email.value,
+        to_email: "filmenvf.a@gmail.com"
+      }).then(() => {
+        alert("Inscription envoyée avec succès !");
+        document.getElementById('signupModal').style.display = 'none';
+      }).catch(() => {
+        alert("Erreur lors de l'inscription.");
+      });
+    }
 
     const products = [
-      {id: 'randm-9000', name: 'RandM Tornado 9000', price: 45},
-      {id: 'oxbar-10k', name: 'OXBAR Magic Maze Pro', price: 55},
-      {id: 'komodo-v-mod-12k', name: 'Komodo V-Mod 12K', price: 60},
-      {id: 'lost-mary-mt-15k', name: 'Lost Mary MT 15K Turbo', price: 65},
-      {id: 'waka-20k', name: 'Waka SoPro 20K', price: 75},
+      {
+        id: 'randm-9000',
+        name: 'RandM Tornado 9000',
+        price: 45,
+        oldPrice: 55,
+        rating: 4.5,
+        promo: true,
+        img: 'https://via.placeholder.com/300x400?text=RandM+9000'
+      },
+      {
+        id: 'oxbar-10k',
+        name: 'OXBAR Magic Maze Pro',
+        price: 55,
+        rating: 4.7,
+        img: 'https://via.placeholder.com/300x400?text=OXBAR+10K'
+      },
+      {
+        id: 'komodo-v-mod-12k',
+        name: 'Komodo V-Mod 12K',
+        price: 60,
+        rating: 4.3,
+        img: 'https://via.placeholder.com/300x400?text=Komodo+12K'
+      }
     ];
-
-    const cart = [];
-
-    function addToCart(productId) {
-      const product = products.find(p => p.id === productId);
-      if (!product) return;
-      cart.push(product);
-      alert(product.name + " ajouté au panier !");
-    }
-
-    function openCart() {
-      document.getElementById('cart-items').innerHTML = '';
-      cart.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'cart-item';
-        div.textContent = `${item.name} - ${item.price} €`;
-        document.getElementById('cart-items').appendChild(div);
-      });
-
-      document.getElementById('cart-modal').style.display = 'flex';
-
-      paypal.Buttons({
-        createOrder: function(data, actions) {
-          return actions.order.create({
-            purchase_units: [{
-              amount: {
-                value: cart.reduce((sum, item) => sum + item.price, 0).toString()
-              }
-            }]
-          });
-        },
-        onApprove: function(data, actions) {
-          return actions.order.capture().then(function(details) {
-            alert('Merci ' + details.payer.name.given_name + '! Paiement réussi.');
-            cart.length = 0;
-            closeCart();
-          });
-        }
-      }).render('#paypal-button-container');
-    }
-
-    function closeCart() {
-      document.getElementById('cart-modal').style.display = 'none';
-    }
 
     function renderProducts() {
       const container = document.getElementById('products');
+      container.innerHTML = '';
       products.forEach(prod => {
         const card = document.createElement('div');
         card.className = 'product-card';
         card.innerHTML = `
+          ${prod.promo ? '<div class="product-badge">Promo !</div>' : ''}
+          <img src="${prod.img}" alt="${prod.name}" />
           <div class="product-name">${prod.name}</div>
-          <div class="product-price">${prod.price} €</div>
-          <button class="add-btn" onclick="addToCart('${prod.id}')">Ajouter au panier</button>
+          <div class="product-rating">${prod.rating} ⭐</div>
+          <div>
+            ${prod.oldPrice ? `<span class="product-old-price">€${prod.oldPrice}</span>` : ''}
+            <span class="product-price">€${prod.price}</span>
+          </div>
+          <button class="add-btn" onclick="alert('Ajouté au panier !')">Ajouter au panier</button>
         `;
         container.appendChild(card);
-      });
-    }
-
-    function openSignup() {
-      document.getElementById('signup-modal').style.display = 'flex';
-    }
-
-    function closeSignup() {
-      document.getElementById('signup-modal').style.display = 'none';
-    }
-
-    function sendSignup(event) {
-      event.preventDefault();
-      const form = event.target;
-
-      emailjs.send("service_default", "template_signup", {
-        name: form.name.value,
-        email: form.email.value,
-        password: form.password.value
-      }).then(() => {
-        alert("Inscription envoyée avec succès !");
-        form.reset();
-        closeSignup();
-      }, (error) => {
-        alert("Erreur : " + error.text);
       });
     }
 
