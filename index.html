@@ -126,42 +126,6 @@
       color: white;
       margin-top: 10px;
     }
-    #signupModal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      display: none;
-    }
-    #signupForm {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      max-width: 400px;
-      width: 100%;
-    }
-    #signupForm input {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    #signupForm button {
-      background: #00cc88;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
@@ -169,11 +133,11 @@
     <div class="logo">CROSSPUFFS</div>
     <div class="nav-links">
       <a href="#">Nouveautés</a>
-      <a href="#">9K</a>
-      <a href="#">10K</a>
-      <a href="#">12K</a>
-      <a href="#">15K</a>
-      <a href="#">20K+</a>
+      <a href="#">9000 Puffs</a>
+      <a href="#">10000 Puffs</a>
+      <a href="#">12000-13000 Puffs</a>
+      <a href="#">15000-16000 Puffs</a>
+      <a href="#">18000-20000+ Puffs</a>
     </div>
     <div class="user-actions">
       <div class="search-bar">
@@ -186,60 +150,22 @@
 
   <div id="products"></div>
 
-  <div id="signupModal">
-    <form id="signupForm" onsubmit="sendSignup(event)">
-      <h3>Inscription</h3>
-      <input type="text" name="name" placeholder="Nom" required>
-      <input type="email" name="email" placeholder="Email" required>
-      <button type="submit">S'inscrire</button>
-    </form>
-  </div>
-
   <script>
-    emailjs.init("user_fictiveKEY123");
-
-    function openSignup() {
-      document.getElementById('signupModal').style.display = 'flex';
-    }
-
-    function sendSignup(e) {
-      e.preventDefault();
-      emailjs.send("default_service", "template_signup", {
-        name: e.target.name.value,
-        email: e.target.email.value,
-        to_email: "filmenvf.a@gmail.com"
-      }).then(() => {
-        alert("Inscription envoyée avec succès !");
-        document.getElementById('signupModal').style.display = 'none';
-      }).catch(() => {
-        alert("Erreur lors de l'inscription.");
-      });
-    }
-
     const products = [
-      {
-        id: 'randm-9000',
-        name: 'RandM Tornado 9000',
-        price: 45,
-        oldPrice: 55,
-        rating: 4.5,
-        promo: true,
-        img: 'https://via.placeholder.com/300x400?text=RandM+9000'
-      },
-      {
-        id: 'oxbar-10k',
-        name: 'OXBAR Magic Maze Pro',
-        price: 55,
-        rating: 4.7,
-        img: 'https://via.placeholder.com/300x400?text=OXBAR+10K'
-      },
-      {
-        id: 'komodo-v-mod-12k',
-        name: 'Komodo V-Mod 12K',
-        price: 60,
-        rating: 4.3,
-        img: 'https://via.placeholder.com/300x400?text=Komodo+12K'
-      }
+      { name: "Waka Smash 9000", price: 45, rating: 4.6, promo: true, img: "https://via.placeholder.com/300x400?text=Waka+Smash+9000" },
+      { name: "Tornado 9000", price: 50, rating: 4.7, img: "https://via.placeholder.com/300x400?text=Tornado+9000" },
+      { name: "RandM Tornado 10000", price: 55, rating: 4.7, img: "https://via.placeholder.com/300x400?text=Tornado+10000" },
+      { name: "RandM Crystal 10000", price: 58, rating: 4.5, img: "https://via.placeholder.com/300x400?text=Crystal+10000" },
+      { name: "Waka SoPro PA10000", price: 60, rating: 4.6, promo: true, img: "https://via.placeholder.com/300x400?text=SoPro+PA10000" },
+      { name: "iJoy Bar IC8000", price: 53, rating: 4.3, img: "https://via.placeholder.com/300x400?text=IC8000" },
+      { name: "Elf Bar BC5000 Ultra", price: 57, rating: 4.5, img: "https://via.placeholder.com/300x400?text=BC5000+Ultra" },
+      { name: "Waka soFit 16000", price: 65, rating: 4.6, img: "https://via.placeholder.com/300x400?text=soFit+16000" },
+      { name: "Geek Bar Pulse 15000", price: 67, rating: 4.8, promo: true, img: "https://via.placeholder.com/300x400?text=Pulse+15000" },
+      { name: "Lost Mary MO20000", price: 70, rating: 4.9, img: "https://via.placeholder.com/300x400?text=MO20000" },
+      { name: "Lost Mary Turbo 20000", price: 72, rating: 4.9, img: "https://via.placeholder.com/300x400?text=Turbo+20000" },
+      { name: "TMT Vape 20000", price: 73, rating: 4.8, img: "https://via.placeholder.com/300x400?text=TMT+20000" },
+      { name: "iJoy Bar Turbo 20000", price: 74, rating: 4.8, img: "https://via.placeholder.com/300x400?text=Turbo+20000" },
+      { name: "Waka soPro Z 20000", price: 75, rating: 4.9, promo: true, img: "https://via.placeholder.com/300x400?text=soPro+Z+20000" }
     ];
 
     function renderProducts() {
@@ -253,10 +179,7 @@
           <img src="${prod.img}" alt="${prod.name}" />
           <div class="product-name">${prod.name}</div>
           <div class="product-rating">${prod.rating} ⭐</div>
-          <div>
-            ${prod.oldPrice ? `<span class="product-old-price">€${prod.oldPrice}</span>` : ''}
-            <span class="product-price">€${prod.price}</span>
-          </div>
+          <div><span class="product-price">€${prod.price}</span></div>
           <button class="add-btn" onclick="alert('Ajouté au panier !')">Ajouter au panier</button>
         `;
         container.appendChild(card);
