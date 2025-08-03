@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vente en gros de puffs - Afterflow</title>
+<style>
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background: #121212;
+color: #eee;
+margin: 0; padding: 0;
+display: flex; flex-direction: column; align-items: center;
+min-height: 100vh;
+}
+header {
+padding: 20px;
+font-size: 2rem;
+font-weight: bold;
+color: #1db954;
+}
+.container {
+width: 90%;
+max-width: 960px;
+}
+.product {
+background: #1e1e1e;
+border-radius: 12px;
+margin-bottom: 24px;
+padding: 20px;
+box-shadow: 0 0 12px #1db954aa;
+}
+h2 {
+margin-top: 0;
+color: #1db954;
+}
+.price-info {
+margin: 8px 0;
+}
+label {
+display: block;
+margin: 12px 0 4px;
+}
+select, input[type=number] {
+width: 100%;
+padding: 8px 12px;
+border-radius: 6px;
+border: none;
+font-size: 1rem;
+background: #333;
+color: #eee;
+}
+.total {
+font-weight: bold;
+font-size: 1.2rem;
+margin: 12px 0;
+color: #1db954;
+}
+.paypal-button-container {
+margin-top: 12px;
+}
+footer {
+margin-top: auto;
+padding: 20px;
+font-size: 0.9rem;
+color: #666;
+}
+/* Responsive */
+@media (max-width: 600px) {
+.container {
+width: 95%;
+}
+}
+</style>
+<script src="https://www.paypal.com/sdk/js?client-id=AYDLOfQ6t8pMJMCwDKJ2cvzRZTxaQR6MODivqKA8_jmDedJRMrfK1XK9dtGvrhOdF6Hnwny9oMMxPCT0&currency=EUR"></script>
+</head>
+<body>
+<header>Afterflow - Vente en gros de puffs</header>
+<div class="container">
+
+<div class="product" data-baseprice="45">
+<h2>Petite autonomie</h2>
+<p>300 - 600 bouffées (ex : Elf Bar 600, Geek Bar Lite)</p>
+<p class="price-info">Prix de base : 45 € / carton de 10</p>
+
+<label for="qty-small">Quantité de cartons :</label>
+<select id="qty-small" class="qty-select">
+<option value="1">1 carton</option>
+<option value="3">3 cartons (-10%)</option>
+<option value="5">5 cartons (-11%)</option>
+<option value="10">10 cartons (-18%) + 1 offert</option>
+</select>
+
+<p class="total">Total : <span id="total-small">45.00</span> €</p>
+<div id="paypal-button-small" class="paypal-button-container"></div>
+</div>
+
+<div class="product" data-baseprice="45">
+<h2>Moyenne autonomie</h2>
+<p>1200 - 2000 bouffées (ex : Wpuff 1500, Aroma King 2000)</p>
+<p class="price-info">Prix de base : 45 € / carton de 10</p>
+
+<label for="qty-medium">Quantité de cartons :</label>
+<select id="qty-medium" class="qty-select">
+<option value="1">1 carton</option>
+<option value="3">3 cartons (-10%)</option>
+<option value="5">5 cartons (-11%)</option>
+<option value="10">10 cartons (-18%) + 1 offert</option>
+</select>
+
+<p class="total">Total : <span id="total-medium">45.00</span> €</p>
+<div id="paypal-button-medium" class="paypal-button-container"></div>
+</div>
+
+<div class="product" data-baseprice="45">
+<h2>Grande autonomie</h2>
+<p>3000 - 5000 bouffées (ex : Lost Mary BM3500, Puffmi TX5000)</p>
+<p class="price-info">Prix de base : 45 € / carton de 10</p>
+
+<label for="qty-large">Quantité de cartons :</label>
+<select id="qty-large" class="qty-select">
+<option value="1">1 carton</option>
+<option value="3">3 cartons (-10%)</option>
+<option value="5">5 cartons (-11%)</option>
+<option value="10">10 cartons (-18%) + 1 offert</option>
+</select>
+
+<p class="total">Total : <span id="total-large">45.00</span> €</p>
+<div id="paypal-button-large" class="paypal-button-container"></div>
+</div>
+
+</div>
+
+<footer>
+&copy; 2025 Afterflow - Vente de puffs en gros - Tous droits réservés
+</footer>
+
+<script>
+// Tarifs en fonction des quantités (paliers)
+const priceTiers = {
+1: 45,
+3: 42, // -10%
+5: 40, // -11%
+10: 37 // -18% + 1 carton offert
+};
+
+function calculateTotal(qty) {
+if (!priceTiers[qty]) return qty * priceTiers[1];
+return qty * priceTiers[qty];
+}
+
+function setupProduct(productId, paypalContainerId, totalId) {
+const qtySelect = document.getElementById(productId);
+const totalSpan = document.getElementById(totalId);
+const container = document.getElementById(paypalContainerId);
+const basePrice = 45; // euros, fixed for all puffs here
+
+function update() {
+const qty = parseInt(qtySelect.value, 10);
+const pricePerCarton = priceTiers[qty] || priceTiers[1];
+const total = calculateTotal(qty);
+totalSpan.textContent = total.toFixed(2);
+
+// Supprime l'ancien bouton PayPal avant de recréer
+container.innerHTML = '';
+
+// Rendu du bouton PayPal avec le prix actuel
+paypal.Buttons({
+createOrder: function(data, actions) {
+return actions.order.create({
+purchase_units: [{
+description: `${qty} carton(s) de puffs - Afterflow`,
+amount: {
+value: total.toFixed(2)
+}
+}]
+});
+},
+onApprove: function(data, actions) {
+return actions.order.capture().then(function(details) {
+alert(`Merci pour votre commande, ${details.payer.name.given_name} !`);
+// Optionnel: redirection après paiement
+// window.location.href = "https://tonsite.com/merci";
+});
+}
+}).render(`#${paypalContainerId}`);
+}
+
+qtySelect.addEventListener('change', update);
+update();
+}
+
+// Initialisation pour les 3 produits
+setupProduct('qty-small', 'paypal-button-small', 'total-small');
+setupProduct('qty-medium', 'paypal-button-medium', 'total-medium');
+setupProduct('qty-large', 'paypal-button-large', 'total-large');
+</script>
+</body>
+</html>
