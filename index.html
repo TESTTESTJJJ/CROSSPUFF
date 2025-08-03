@@ -3,85 +3,108 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Vente en gros de puffs - CROSSPUFF</title>
+<title>CROSSPUFFS - Vente de Puffs en Gros</title>
+<script src="https://www.paypal.com/sdk/js?client-id=AYDLOfQ6t8pMJMCwDKJ2cvzRZTxaQR6MODivqKA8_jmDedJRMrfK1XK9dtGvrhOdF6Hnwny9oMMxPCT0&currency=EUR"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
 <style>
 body {
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-background: #121212;
-color: #eee;
-margin: 0; padding: 0;
-display: flex; flex-direction: column; align-items: center;
-min-height: 100vh;
+margin: 0;
+padding: 0;
+font-family: 'Segoe UI', Tahoma, sans-serif;
+background-color: #111;
+color: #f4f4f4;
+display: flex;
+flex-direction: column;
+align-items: center;
 }
+
 header {
-padding: 20px;
-font-size: 2rem;
-font-weight: bold;
-color: #1db954;
+width: 100%;
+background-color: #000;
+padding: 30px 0;
+text-align: center;
+font-size: 2.5rem;
+font-family: 'Orbitron', sans-serif;
+color: #fff;
+letter-spacing: 3px;
+box-shadow: 0 2px 10px #1db954aa;
 }
+
 .container {
 width: 90%;
-max-width: 960px;
+max-width: 1000px;
+margin: 40px auto;
 }
+
 .product {
-background: #1e1e1e;
+background: #1a1a1a;
+border: 1px solid #333;
 border-radius: 12px;
-margin-bottom: 24px;
-padding: 20px;
-box-shadow: 0 0 12px #1db954aa;
+padding: 25px;
+margin-bottom: 40px;
+box-shadow: 0 0 10px rgba(29, 185, 84, 0.2);
 }
-h2 {
-margin-top: 0;
+
+.product h2 {
+font-size: 1.8rem;
 color: #1db954;
+margin-bottom: 8px;
 }
+
+.product p {
+margin: 6px 0;
+line-height: 1.5;
+}
+
 .price-info {
-margin: 8px 0;
+font-style: italic;
+color: #aaa;
+margin-top: 8px;
 }
+
 label {
 display: block;
-margin: 12px 0 4px;
+margin: 15px 0 5px;
 }
-select, input[type=number] {
+
+select {
 width: 100%;
-padding: 8px 12px;
-border-radius: 6px;
+padding: 10px;
+background: #222;
+color: #fff;
 border: none;
-font-size: 1rem;
-background: #333;
-color: #eee;
+border-radius: 6px;
 }
+
 .total {
 font-weight: bold;
-font-size: 1.2rem;
-margin: 12px 0;
+font-size: 1.3rem;
+margin: 15px 0;
 color: #1db954;
 }
-.paypal-button-container {
-margin-top: 12px;
-}
+
 footer {
-margin-top: auto;
-padding: 20px;
+text-align: center;
 font-size: 0.9rem;
 color: #666;
+padding: 40px 0 20px;
 }
-/* Responsive */
-@media (max-width: 600px) {
-.container {
-width: 95%;
-}
+
+.paypal-button-container {
+margin-top: 20px;
 }
 </style>
-<script src="https://www.paypal.com/sdk/js?client-id=AYDLOfQ6t8pMJMCwDKJ2cvzRZTxaQR6MODivqKA8_jmDedJRMrfK1XK9dtGvrhOdF6Hnwny9oMMxPCT0&currency=EUR"></script>
 </head>
 <body>
-<header>Afterflow - Vente en gros de puffs</header>
+<header>CROSSPUFFS</header>
 <div class="container">
 
+<!-- Puff 9K -->
 <div class="product" data-baseprice="45">
-<h2>Petite autonomie</h2>
-<p>300 - 600 bouffées (ex : Elf Bar 600, Geek Bar Lite)</p>
-<p class="price-info">Prix de base : 45 € / carton de 10</p>
+<h2>Puff 9K</h2>
+<p>✅ 9000 bouffées – Jetable rechargeable – Port USB-C<br>
+✅ Double arôme – Format compact – Saveur intense</p>
+<p class="price-info">Prix : 45 € / carton de 10 unités</p>
 
 <label for="qty-small">Quantité de cartons :</label>
 <select id="qty-small" class="qty-select">
@@ -95,10 +118,12 @@ width: 95%;
 <div id="paypal-button-small" class="paypal-button-container"></div>
 </div>
 
+<!-- Puff 15K -->
 <div class="product" data-baseprice="45">
-<h2>Moyenne autonomie</h2>
-<p>1200 - 2000 bouffées (ex : Wpuff 1500, Aroma King 2000)</p>
-<p class="price-info">Prix de base : 45 € / carton de 10</p>
+<h2>Puff 15K</h2>
+<p>✅ 15000 bouffées – Écran LCD – Airflow réglable<br>
+✅ Port USB-C – Saveurs longues durée – Rechargeable</p>
+<p class="price-info">Prix : 45 € / carton de 10 unités</p>
 
 <label for="qty-medium">Quantité de cartons :</label>
 <select id="qty-medium" class="qty-select">
@@ -112,10 +137,12 @@ width: 95%;
 <div id="paypal-button-medium" class="paypal-button-container"></div>
 </div>
 
+<!-- Puff 22K -->
 <div class="product" data-baseprice="45">
-<h2>Grande autonomie</h2>
-<p>3000 - 5000 bouffées (ex : Lost Mary BM3500, Puffmi TX5000)</p>
-<p class="price-info">Prix de base : 45 € / carton de 10</p>
+<h2>Puff 22K</h2>
+<p>✅ 22000 bouffées – Autonomie extrême – Format box lumineux<br>
+✅ Saveurs explosives – Port USB-C – Rechargeable</p>
+<p class="price-info">Prix : 45 € / carton de 10 unités</p>
 
 <label for="qty-large">Quantité de cartons :</label>
 <select id="qty-large" class="qty-select">
@@ -132,55 +159,45 @@ width: 95%;
 </div>
 
 <footer>
-&copy; 2025 Afterflow - Vente de puffs en gros - Tous droits réservés
+&copy; 2025 CROSSPUFFS - Tous droits réservés.
 </footer>
 
 <script>
-// Tarifs en fonction des quantités (paliers)
 const priceTiers = {
 1: 45,
-3: 42, // -10%
-5: 40, // -11%
-10: 37 // -18% + 1 carton offert
+3: 42,
+5: 40,
+10: 37
 };
 
 function calculateTotal(qty) {
-if (!priceTiers[qty]) return qty * priceTiers[1];
-return qty * priceTiers[qty];
+return qty * (priceTiers[qty] || priceTiers[1]);
 }
 
-function setupProduct(productId, paypalContainerId, totalId) {
+function setupProduct(productId, paypalContainerId, totalId, label) {
 const qtySelect = document.getElementById(productId);
 const totalSpan = document.getElementById(totalId);
 const container = document.getElementById(paypalContainerId);
-const basePrice = 45; // euros, fixed for all puffs here
 
 function update() {
 const qty = parseInt(qtySelect.value, 10);
 const pricePerCarton = priceTiers[qty] || priceTiers[1];
 const total = calculateTotal(qty);
 totalSpan.textContent = total.toFixed(2);
-
-// Supprime l'ancien bouton PayPal avant de recréer
 container.innerHTML = '';
 
-// Rendu du bouton PayPal avec le prix actuel
 paypal.Buttons({
 createOrder: function(data, actions) {
 return actions.order.create({
 purchase_units: [{
-description: `${qty} carton(s) de puffs - Afterflow`,
-amount: {
-value: total.toFixed(2)
-}
+description: `${label} - ${qty} carton(s)`,
+amount: { value: total.toFixed(2) }
 }]
 });
 },
 onApprove: function(data, actions) {
 return actions.order.capture().then(function(details) {
-alert(`Merci pour votre commande, ${details.payer.name.given_name} !`);
-// Optionnel: redirection après paiement
-// window.location.href = "https://tonsite.com/merci";
+alert(`Merci ${details.payer.name.given_name} ! Paiement confirmé.`);
 });
 }
 }).render(`#${paypalContainerId}`);
@@ -190,10 +207,9 @@ qtySelect.addEventListener('change', update);
 update();
 }
 
-// Initialisation pour les 3 produits
-setupProduct('qty-small', 'paypal-button-small', 'total-small');
-setupProduct('qty-medium', 'paypal-button-medium', 'total-medium');
-setupProduct('qty-large', 'paypal-button-large', 'total-large');
+setupProduct('qty-small', 'paypal-button-small', 'total-small', 'Puff 9K');
+setupProduct('qty-medium', 'paypal-button-medium', 'total-medium', 'Puff 15K');
+setupProduct('qty-large', 'paypal-button-large', 'total-large', 'Puff 22K');
 </script>
 </body>
 </html>
