@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CROSSPUFFS - Vente de puffs</title>
   <script src="https://www.paypal.com/sdk/js?client-id=AYDLOfQ6t8pMJMCwDKJ2cvzRZTxaQR6MODivqKA8_jmDedJRMrfK1XK9dtGvrhOdF6Hnwny9oMMxPCT0&currency=EUR"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <style>
     body {
       margin: 0;
@@ -12,31 +13,49 @@
       background: #f7f7f7;
       color: #333;
     }
-    header {
-      background: #00ff99;
-      color: #121212;
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 900;
-      font-size: 2.5rem;
-      padding: 20px;
-      text-align: center;
-    }
-    nav {
+    header, nav {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 10px 20px;
+      justify-content: space-between;
+      padding: 15px 30px;
       background: #fff;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    .cart-btn {
-      background: #00ff99;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 8px;
-      cursor: pointer;
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
       font-weight: bold;
-      color: #121212;
+      color: #00cc88;
+      user-select: none;
+    }
+    .nav-links, .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-links a, .user-actions a, .user-actions button {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .nav-links a:hover, .user-actions a:hover {
+      color: #00cc88;
+    }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: #eee;
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+    .search-bar input {
+      border: none;
+      background: transparent;
+      outline: none;
+      padding: 5px;
     }
     #products {
       display: grid;
@@ -94,14 +113,50 @@
       display: flex;
       justify-content: space-between;
     }
+    #signup-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+    #signup-form {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 400px;
+      width: 90%;
+    }
+    #signup-form input {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
-  <header>CROSSPUFFS</header>
-  <nav>
-    <div>Catégories : 9K / 10K / 12K / 15K / 20K</div>
-    <button class="cart-btn" onclick="openCart()">🛒 Mon Panier</button>
-  </nav>
+  <header>
+    <div class="logo">CROSSPUFFS</div>
+    <div class="nav-links">
+      <a href="#">Nouveautés</a>
+      <a href="#">9K</a>
+      <a href="#">10K</a>
+      <a href="#">12K</a>
+      <a href="#">15K</a>
+      <a href="#">20K+</a>
+    </div>
+    <div class="user-actions">
+      <div class="search-bar">
+        <input type="text" placeholder="Rechercher...">
+      </div>
+      <a href="#" onclick="openSignup()">S'inscrire</a>
+      <a href="#" onclick="openCart()">🛒</a>
+    </div>
+  </header>
 
   <div id="products"></div>
 
@@ -114,7 +169,20 @@
     </div>
   </div>
 
+  <div id="signup-modal">
+    <form id="signup-form" onsubmit="sendSignup(event)">
+      <h3>Créer un compte</h3>
+      <input type="text" name="name" placeholder="Nom" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="password" placeholder="Mot de passe" required />
+      <button type="submit" class="cart-btn">S'inscrire</button>
+      <button type="button" class="cart-btn" style="background:#ccc;margin-top:10px" onclick="closeSignup()">Annuler</button>
+    </form>
+  </div>
+
   <script>
+    emailjs.init("user_XXXXXXX"); // remplace avec ton user ID emailjs
+
     const products = [
       {id: 'randm-9000', name: 'RandM Tornado 9000', price: 45},
       {id: 'oxbar-10k', name: 'OXBAR Magic Maze Pro', price: 55},
@@ -178,6 +246,31 @@
           <button class="add-btn" onclick="addToCart('${prod.id}')">Ajouter au panier</button>
         `;
         container.appendChild(card);
+      });
+    }
+
+    function openSignup() {
+      document.getElementById('signup-modal').style.display = 'flex';
+    }
+
+    function closeSignup() {
+      document.getElementById('signup-modal').style.display = 'none';
+    }
+
+    function sendSignup(event) {
+      event.preventDefault();
+      const form = event.target;
+
+      emailjs.send("service_default", "template_signup", {
+        name: form.name.value,
+        email: form.email.value,
+        password: form.password.value
+      }).then(() => {
+        alert("Inscription envoyée avec succès !");
+        form.reset();
+        closeSignup();
+      }, (error) => {
+        alert("Erreur : " + error.text);
       });
     }
 
