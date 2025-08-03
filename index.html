@@ -3,213 +3,235 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CROSSPUFFS - Vente de Puffs en Gros</title>
-<script src="https://www.paypal.com/sdk/js?client-id=AYDLOfQ6t8pMJMCwDKJ2cvzRZTxaQR6MODivqKA8_jmDedJRMrfK1XK9dtGvrhOdF6Hnwny9oMMxPCT0&currency=EUR"></script>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+<title>CROSSPUFFS - Vente de puffs en gros</title>
 <style>
 body {
-margin: 0;
-padding: 0;
-font-family: 'Segoe UI', Tahoma, sans-serif;
-background-color: #111;
-color: #f4f4f4;
-display: flex;
-flex-direction: column;
-align-items: center;
+background: #121212;
+color: white;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+margin: 0; padding: 20px;
 }
-
 header {
-width: 100%;
-background-color: #000;
-padding: 30px 0;
 text-align: center;
 font-size: 2.5rem;
-font-family: 'Orbitron', sans-serif;
-color: #fff;
-letter-spacing: 3px;
-box-shadow: 0 2px 10px #1db954aa;
-}
-
-.container {
-width: 90%;
-max-width: 1000px;
-margin: 40px auto;
-}
-
-.product {
-background: #1a1a1a;
-border: 1px solid #333;
-border-radius: 12px;
-padding: 25px;
+font-weight: 900;
+color: white;
+letter-spacing: 0.15em;
 margin-bottom: 40px;
-box-shadow: 0 0 10px rgba(29, 185, 84, 0.2);
+font-family: 'Orbitron', sans-serif; /* style techno */
 }
-
+.products-container {
+display: flex;
+flex-wrap: wrap;
+gap: 25px;
+justify-content: center;
+}
+.product {
+background: #1f1f1f;
+border-radius: 12px;
+box-shadow: 0 0 12px #00ff99aa;
+padding: 20px;
+max-width: 320px;
+flex: 1 1 300px;
+}
 .product h2 {
-font-size: 1.8rem;
-color: #1db954;
-margin-bottom: 8px;
+margin-top: 0;
+font-size: 1.7rem;
+color: #00ff99;
 }
-
 .product p {
-margin: 6px 0;
-line-height: 1.5;
+line-height: 1.4;
+font-size: 0.95rem;
+color: #ccc;
 }
-
 .price-info {
-font-style: italic;
-color: #aaa;
-margin-top: 8px;
-}
-
-label {
-display: block;
-margin: 15px 0 5px;
-}
-
-select {
-width: 100%;
-padding: 10px;
-background: #222;
+font-weight: 700;
+margin-top: 12px;
+font-size: 1.1rem;
 color: #fff;
-border: none;
+}
+label, select {
+margin-top: 10px;
+display: block;
+font-weight: 600;
+}
+select {
+margin-bottom: 10px;
+width: 100%;
+padding: 8px 10px;
 border-radius: 6px;
+border: none;
+font-size: 1rem;
+background: #333;
+color: white;
 }
-
 .total {
-font-weight: bold;
-font-size: 1.3rem;
-margin: 15px 0;
-color: #1db954;
+font-weight: 700;
+font-size: 1.1rem;
+margin-bottom: 15px;
+color: #00ff99;
 }
-
-footer {
-text-align: center;
-font-size: 0.9rem;
-color: #666;
-padding: 40px 0 20px;
-}
-
 .paypal-button-container {
-margin-top: 20px;
+margin-top: 8px;
 }
 </style>
 </head>
 <body>
-<header>CROSSPUFFS</header>
-<div class="container">
 
-<!-- Puff 9K -->
+<header>CROSSPUFFS</header>
+
+<div class="products-container">
+
+<!-- PRODUITS AUTONOMIE -->
 <div class="product" data-baseprice="45">
 <h2>Puff 9K</h2>
-<p>✅ 9000 bouffées – Jetable rechargeable – Port USB-C<br>
-✅ Double arôme – Format compact – Saveur intense</p>
-<p class="price-info">Prix : 45 € / carton de 10 unités</p>
-
-<label for="qty-small">Quantité de cartons :</label>
-<select id="qty-small" class="qty-select">
+<p>9000 bouffées – Jetable rechargeable – Port USB-C<br>Double arôme – Format compact – Saveur intense</p>
+<p class="price-info">Prix : 45 € / carton de 10</p>
+<label for="qty-puff9k">Quantité :</label>
+<select id="qty-puff9k" class="qty-select">
 <option value="1">1 carton</option>
 <option value="3">3 cartons (-10%)</option>
 <option value="5">5 cartons (-11%)</option>
 <option value="10">10 cartons (-18%) + 1 offert</option>
 </select>
-
-<p class="total">Total : <span id="total-small">45.00</span> €</p>
-<div id="paypal-button-small" class="paypal-button-container"></div>
+<p class="total">Total : <span id="total-puff9k">45.00</span> €</p>
+<div id="paypal-button-puff9k" class="paypal-button-container"></div>
 </div>
 
-<!-- Puff 15K -->
 <div class="product" data-baseprice="45">
 <h2>Puff 15K</h2>
-<p>✅ 15000 bouffées – Écran LCD – Airflow réglable<br>
-✅ Port USB-C – Saveurs longues durée – Rechargeable</p>
-<p class="price-info">Prix : 45 € / carton de 10 unités</p>
-
-<label for="qty-medium">Quantité de cartons :</label>
-<select id="qty-medium" class="qty-select">
+<p>15000 bouffées – Écran LCD – Airflow réglable<br>Port USB-C – Saveurs longues durée – Rechargeable</p>
+<p class="price-info">Prix : 45 € / carton de 10</p>
+<label for="qty-puff15k">Quantité :</label>
+<select id="qty-puff15k" class="qty-select">
 <option value="1">1 carton</option>
 <option value="3">3 cartons (-10%)</option>
 <option value="5">5 cartons (-11%)</option>
 <option value="10">10 cartons (-18%) + 1 offert</option>
 </select>
-
-<p class="total">Total : <span id="total-medium">45.00</span> €</p>
-<div id="paypal-button-medium" class="paypal-button-container"></div>
+<p class="total">Total : <span id="total-puff15k">45.00</span> €</p>
+<div id="paypal-button-puff15k" class="paypal-button-container"></div>
 </div>
 
-<!-- Puff 22K -->
 <div class="product" data-baseprice="45">
 <h2>Puff 22K</h2>
-<p>✅ 22000 bouffées – Autonomie extrême – Format box lumineux<br>
-✅ Saveurs explosives – Port USB-C – Rechargeable</p>
-<p class="price-info">Prix : 45 € / carton de 10 unités</p>
-
-<label for="qty-large">Quantité de cartons :</label>
-<select id="qty-large" class="qty-select">
+<p>22000 bouffées – Autonomie extrême – Format box lumineux<br>Saveurs explosives – Port USB-C – Rechargeable</p>
+<p class="price-info">Prix : 45 € / carton de 10</p>
+<label for="qty-puff22k">Quantité :</label>
+<select id="qty-puff22k" class="qty-select">
 <option value="1">1 carton</option>
 <option value="3">3 cartons (-10%)</option>
 <option value="5">5 cartons (-11%)</option>
 <option value="10">10 cartons (-18%) + 1 offert</option>
 </select>
+<p class="total">Total : <span id="total-puff22k">45.00</span> €</p>
+<div id="paypal-button-puff22k" class="paypal-button-container"></div>
+</div>
 
-<p class="total">Total : <span id="total-large">45.00</span> €</p>
-<div id="paypal-button-large" class="paypal-button-container"></div>
+<!-- PRODUITS GOÛT -->
+<div class="product" data-baseprice="50">
+<h2>Puff Ice Menthe</h2>
+<p>Menthe glaciale – Format stick fin – Jetable<br>Sans nicotine – Design LED lumineux</p>
+<p class="price-info">Prix : 50 € / carton de 10</p>
+<label for="qty-puffice">Quantité :</label>
+<select id="qty-puffice" class="qty-select">
+<option value="1">1 carton</option>
+<option value="3">3 cartons (-10%)</option>
+<option value="5">5 cartons (-11%)</option>
+<option value="10">10 cartons (-18%) + 1 offert</option>
+</select>
+<p class="total">Total : <span id="total-puffice">50.00</span> €</p>
+<div id="paypal-button-puffice" class="paypal-button-container"></div>
+</div>
+
+<div class="product" data-baseprice="50">
+<h2>Puff Mangue</h2>
+<p>Saveur mangue sucrée – Format box rechargeable<br>Recharge USB-C – Saveur intense et durable</p>
+<p class="price-info">Prix : 50 € / carton de 10</p>
+<label for="qty-puffmangue">Quantité :</label>
+<select id="qty-puffmangue" class="qty-select">
+<option value="1">1 carton</option>
+<option value="3">3 cartons (-10%)</option>
+<option value="5">5 cartons (-11%)</option>
+<option value="10">10 cartons (-18%) + 1 offert</option>
+</select>
+<p class="total">Total : <span id="total-puffmangue">50.00</span> €</p>
+<div id="paypal-button-puffmangue" class="paypal-button-container"></div>
+</div>
+
+<!-- PRODUITS NICOTINE -->
+<div class="product" data-baseprice="40">
+<h2>Puff Sans Nicotine</h2>
+<p>1200 bouffées – Format box rechargeable – Saveur fruits rouges<br>0 mg nicotine – Recharge USB-C – Usage multiple</p>
+<p class="price-info">Prix : 40 € / carton de 10</p>
+<label for="qty-puffnicotine">Quantité :</label>
+<select id="qty-puffnicotine" class="qty-select">
+<option value="1">1 carton</option>
+<option value="3">3 cartons (-10%)</option>
+<option value="5">5 cartons (-11%)</option>
+<option value="10">10 cartons (-18%) + 1 offert</option>
+</select>
+<p class="total">Total : <span id="total-puffnicotine">40.00</span> €</p>
+<div id="paypal-button-puffnicotine" class="paypal-button-container"></div>
 </div>
 
 </div>
 
-<footer>
-&copy; 2025 CROSSPUFFS - Tous droits réservés.
-</footer>
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=EUR"></script>
 
 <script>
-const priceTiers = {
-1: 45,
-3: 42,
-5: 40,
-10: 37
-};
-
-function calculateTotal(qty) {
-return qty * (priceTiers[qty] || priceTiers[1]);
+// Fonction pour calculer prix avec remise
+function calculatePrice(basePrice, qty) {
+if (qty >= 10) return basePrice * qty * 0.82; // -18% + 1 offert inclus (offre spéciale)
+if (qty >= 5) return basePrice * qty * 0.89; // -11%
+if (qty >= 3) return basePrice * qty * 0.90; // -10%
+return basePrice * qty;
 }
 
-function setupProduct(productId, paypalContainerId, totalId, label) {
-const qtySelect = document.getElementById(productId);
+function setupProduct(qtyId, totalId, paypalId, productName, basePrice) {
+const qtySelect = document.getElementById(qtyId);
 const totalSpan = document.getElementById(totalId);
-const container = document.getElementById(paypalContainerId);
+let currentQty = parseInt(qtySelect.value);
 
-function update() {
-const qty = parseInt(qtySelect.value, 10);
-const pricePerCarton = priceTiers[qty] || priceTiers[1];
-const total = calculateTotal(qty);
+function updateTotal() {
+currentQty = parseInt(qtySelect.value);
+let total = calculatePrice(basePrice, currentQty);
 totalSpan.textContent = total.toFixed(2);
-container.innerHTML = '';
+}
 
+qtySelect.addEventListener("change", updateTotal);
+updateTotal();
+
+// Config PayPal Button
 paypal.Buttons({
+style: { layout: 'vertical', color: 'green', shape: 'rect', label: 'pay' },
 createOrder: function(data, actions) {
 return actions.order.create({
 purchase_units: [{
-description: `${label} - ${qty} carton(s)`,
-amount: { value: total.toFixed(2) }
+description: productName,
+amount: {
+currency_code: "EUR",
+value: calculatePrice(basePrice, parseInt(qtySelect.value)).toFixed(2)
+}
 }]
 });
 },
 onApprove: function(data, actions) {
 return actions.order.capture().then(function(details) {
-alert(`Merci ${details.payer.name.given_name} ! Paiement confirmé.`);
+alert("Merci pour votre achat, " + details.payer.name.given_name + " !");
 });
 }
-}).render(`#${paypalContainerId}`);
+}).render('#' + paypalId);
 }
 
-qtySelect.addEventListener('change', update);
-update();
-}
-
-setupProduct('qty-small', 'paypal-button-small', 'total-small', 'Puff 9K');
-setupProduct('qty-medium', 'paypal-button-medium', 'total-medium', 'Puff 15K');
-setupProduct('qty-large', 'paypal-button-large', 'total-large', 'Puff 22K');
+// Initialisation de tous les produits
+setupProduct("qty-puff9k", "total-puff9k", "paypal-button-puff9k", "Puff 9K", 45);
+setupProduct("qty-puff15k", "total-puff15k", "paypal-button-puff15k", "Puff 15K", 45);
+setupProduct("qty-puff22k", "total-puff22k", "paypal-button-puff22k", "Puff 22K", 45);
+setupProduct("qty-puffice", "total-puffice", "paypal-button-puffice", "Puff Ice Menthe", 50);
+setupProduct("qty-puffmangue", "total-puffmangue", "paypal-button-puffmangue", "Puff Mangue", 50);
+setupProduct("qty-puffnicotine", "total-puffnicotine", "paypal-button-puffnicotine", "Puff Sans Nicotine", 40);
 </script>
+
 </body>
 </html>
