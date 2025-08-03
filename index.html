@@ -4,14 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CROSSPUFFS - Vente de puffs</title>
+
+  <!-- PayPal SDK -->
   <script src="https://www.paypal.com/sdk/js?client-id=AYDLOfQ6t8pMJMCwDKJ2cvzRZTxaQR6MODivqKA8_jmDedJRMrfK1XK9dtGvrhOdF6Hnwny9oMMxPCT0&currency=EUR"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f7f7f7;
       color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     header, nav {
       display: flex;
@@ -20,6 +26,9 @@
       padding: 15px 30px;
       background: #fff;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 1200px;
+      box-sizing: border-box;
     }
     .logo {
       font-family: 'Orbitron', sans-serif;
@@ -27,11 +36,13 @@
       font-weight: bold;
       color: #00cc88;
       user-select: none;
+      cursor: pointer;
     }
     .nav-links, .user-actions {
       display: flex;
       align-items: center;
       gap: 20px;
+      flex-wrap: wrap;
     }
     .nav-links a, .user-actions a, .user-actions button {
       text-decoration: none;
@@ -40,6 +51,7 @@
       cursor: pointer;
       background: none;
       border: none;
+      font-size: 1rem;
     }
     .nav-links a:hover, .user-actions a:hover {
       color: #00cc88;
@@ -50,20 +62,49 @@
       background: #eee;
       padding: 6px 12px;
       border-radius: 20px;
+      flex-grow: 1;
+      max-width: 300px;
     }
     .search-bar input {
       border: none;
       background: transparent;
       outline: none;
       padding: 5px;
+      width: 100%;
     }
+
+    #filters {
+      max-width: 1200px;
+      width: 100%;
+      padding: 10px 30px;
+      display: flex;
+      gap: 20px;
+      box-sizing: border-box;
+      justify-content: flex-start;
+      background: #fff;
+      margin: 15px 0 0 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      flex-wrap: wrap;
+    }
+    #filters label {
+      font-weight: 600;
+      margin-right: 8px;
+    }
+    #filters select {
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+
     #products {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
       padding: 30px;
       max-width: 1200px;
-      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
     }
     .product-card {
       background: #fff;
@@ -73,6 +114,9 @@
       position: relative;
       overflow: hidden;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .product-card:hover {
       transform: translateY(-5px);
@@ -82,6 +126,7 @@
       width: 100%;
       height: auto;
       border-radius: 6px;
+      margin-bottom: 10px;
     }
     .product-badge {
       position: absolute;
@@ -93,11 +138,12 @@
       border-radius: 6px;
       font-size: 0.8rem;
       font-weight: bold;
+      user-select: none;
     }
     .product-name {
       font-weight: bold;
-      font-size: 1rem;
-      margin: 10px 0 5px;
+      font-size: 1.1rem;
+      margin: 5px 0 5px;
     }
     .product-rating {
       font-size: 0.9rem;
@@ -105,16 +151,18 @@
       display: flex;
       align-items: center;
       gap: 5px;
+      margin-bottom: 8px;
     }
     .product-price {
       font-weight: bold;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       color: #0066cc;
     }
     .product-old-price {
       text-decoration: line-through;
       color: #aaa;
       margin-right: 8px;
+      font-size: 1rem;
     }
     .add-btn {
       background: #00cc88;
@@ -125,68 +173,676 @@
       font-weight: bold;
       color: white;
       margin-top: 10px;
+      transition: background-color 0.3s ease;
+    }
+    .add-btn:hover {
+      background: #009966;
+    }
+
+    .option-select {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .option-select label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .option-select select {
+      padding: 4px 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 100%;
+      max-width: 130px;
+      cursor: pointer;
+    }
+
+    /* Panier Modal */
+    #cart-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    #cart-modal.active {
+      display: flex;
+    }
+    #cart-content {
+      background: white;
+      border-radius: 10px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 20px;
+      box-sizing: border-box;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    #cart-content h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #00cc88;
+      user-select: none;
+    }
+    #cart-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      font-weight: bold;
+      color: #333;
+    }
+    #cart-list {
+      flex-grow: 1;
+      overflow-y: auto;
+      margin-bottom: 15px;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+    .cart-item img {
+      width: 60px;
+      height: auto;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .cart-item-info {
+      flex-grow: 1;
+    }
+    .cart-item-name {
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: 3px;
+    }
+    .cart-item-details {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 3px;
+    }
+    .cart-item-qty {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .cart-item-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #cc3300;
+      font-weight: bold;
+      font-size: 1.2rem;
+      user-select: none;
+    }
+    #cart-total {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      text-align: right;
+    }
+    #paypal-button-container {
+      align-self: center;
+    }
+
+    @media(max-width: 600px) {
+      header, nav, #filters {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .nav-links {
+        gap: 10px;
+      }
+      .user-actions {
+        gap: 10px;
+        margin-top: 10px;
+        width: 100%;
+        justify-content: space-between;
+      }
+      #filters {
+        padding: 10px 15px;
+      }
+      .option-select {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .option-select select {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
 <body>
+
   <header>
-    <div class="logo">CROSSPUFFS</div>
-    <div class="nav-links">
-      <a href="#">Nouveautés</a>
-      <a href="#">9000 Puffs</a>
-      <a href="#">10000 Puffs</a>
-      <a href="#">12000-13000 Puffs</a>
-      <a href="#">15000-16000 Puffs</a>
-      <a href="#">18000-20000+ Puffs</a>
-    </div>
+    <div class="logo" onclick="goHome()">CROSSPUFFS</div>
+    <nav class="nav-links">
+      <a href="?cat=promo">Nouveautés</a>
+      <a href="?cat=9000">9K</a>
+      <a href="?cat=10000">10K</a>
+      <a href="?cat=12000">12K</a>
+      <a href="?cat=15000">15K</a>
+      <a href="?cat=20000">20K+</a>
+    </nav>
     <div class="user-actions">
       <div class="search-bar">
-        <input type="text" placeholder="Rechercher...">
+        <input id="search-input" type="text" placeholder="Rechercher..." />
       </div>
-      <a href="#" onclick="openSignup()">S'inscrire</a>
-      <a href="#" onclick="openCart()">🛒</a>
+      <button onclick="openSignup()">S'inscrire</button>
+      <button onclick="openCart()">🛒</button>
     </div>
   </header>
 
-  <div id="products"></div>
+  <div id="filters">
+    <label for="filter-price">Filtrer par prix :</label>
+    <select id="filter-price">
+      <option value="none">Aucun</option>
+      <option value="asc">Prix croissant</option>
+      <option value="desc">Prix décroissant</option>
+    </select>
 
-  <script>
-    const products = [
-      { name: "Waka Smash 9000", price: 45, rating: 4.6, promo: true, img: "https://via.placeholder.com/300x400?text=Waka+Smash+9000" },
-      { name: "Tornado 9000", price: 50, rating: 4.7, img: "https://via.placeholder.com/300x400?text=Tornado+9000" },
-      { name: "RandM Tornado 10000", price: 55, rating: 4.7, img: "https://via.placeholder.com/300x400?text=Tornado+10000" },
-      { name: "RandM Crystal 10000", price: 58, rating: 4.5, img: "https://via.placeholder.com/300x400?text=Crystal+10000" },
-      { name: "Waka SoPro PA10000", price: 60, rating: 4.6, promo: true, img: "https://via.placeholder.com/300x400?text=SoPro+PA10000" },
-      { name: "iJoy Bar IC8000", price: 53, rating: 4.3, img: "https://via.placeholder.com/300x400?text=IC8000" },
-      { name: "Elf Bar BC5000 Ultra", price: 57, rating: 4.5, img: "https://via.placeholder.com/300x400?text=BC5000+Ultra" },
-      { name: "Waka soFit 16000", price: 65, rating: 4.6, img: "https://via.placeholder.com/300x400?text=soFit+16000" },
-      { name: "Geek Bar Pulse 15000", price: 67, rating: 4.8, promo: true, img: "https://via.placeholder.com/300x400?text=Pulse+15000" },
-      { name: "Lost Mary MO20000", price: 70, rating: 4.9, img: "https://via.placeholder.com/300x400?text=MO20000" },
-      { name: "Lost Mary Turbo 20000", price: 72, rating: 4.9, img: "https://via.placeholder.com/300x400?text=Turbo+20000" },
-      { name: "TMT Vape 20000", price: 73, rating: 4.8, img: "https://via.placeholder.com/300x400?text=TMT+20000" },
-      { name: "iJoy Bar Turbo 20000", price: 74, rating: 4.8, img: "https://via.placeholder.com/300x400?text=Turbo+20000" },
-      { name: "Waka soPro Z 20000", price: 75, rating: 4.9, promo: true, img: "https://via.placeholder.com/300x400?text=soPro+Z+20000" }
-    ];
+    <label for="filter-rating">Filtrer par note :</label>
+    <select id="filter-rating">
+      <option value="none">Aucun</option>
+      <option value="4.5plus">4.5+ étoiles</option>
+      <option value="4.7plus">4.7+ étoiles</option>
+      <option value="4.8plus">4.8+ étoiles</option>
+    </select>
+  </div>
 
-    function renderProducts() {
-      const container = document.getElementById('products');
-      container.innerHTML = '';
-      products.forEach(prod => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-          ${prod.promo ? '<div class="product-badge">Promo !</div>' : ''}
-          <img src="${prod.img}" alt="${prod.name}" />
-          <div class="product-name">${prod.name}</div>
-          <div class="product-rating">${prod.rating} ⭐</div>
-          <div><span class="product-price">€${prod.price}</span></div>
-          <button class="add-btn" onclick="alert('Ajouté au panier !')">Ajouter au panier</button>
-        `;
-        container.appendChild(card);
-      });
+  <main id="products"></main>
+
+  <!-- Modal Panier -->
+  <div id="cart-modal" aria-hidden="true">
+    <div id="cart-content" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+      <button id="cart-close" aria-label="Fermer le panier">&times;</button>
+      <h2 id="cart-title">Votre Panier</h2>
+      <div id="cart-list"></div>
+      <div id="cart-total">Total: €0.00</div>
+      <div id="paypal-button-container"></div>
+    </div>
+  </div>
+
+<script>
+  // Produits
+  const products = [
+    { id: 1, name: "Waka Smash 9000", category: "9000", promo: true, rating: 4.5, price: 45, oldPrice: 55, img: "https://via.placeholder.com/300x400?text=Waka+Smash+9000" },
+    { id: 2, name: "Tornado 9000", category: "9000", promo: false, rating: 4.6, price: 49, img: "https://via.placeholder.com/300x400?text=Tornado+9000" },
+    { id: 3, name: "RandM Tornado 10000", category: "10000", promo: false, rating: 4.5, price: 52, img: "https://via.placeholder.com/300x400?text=RandM+10000" },
+    { id: 4, name: "RandM Crystal 10000", category: "10000", promo: true, rating: 4.7, price: 54, oldPrice: 60, img: "https://via.placeholder.com/300x400?text=Crystal+10000" },
+    { id: 5, name: "Waka SoPro PA10000", category: "12000", promo: false, rating: 4.6, price: 59, img: "https://via.placeholder.com/300x400?text=Waka+PA10000" },
+    { id: 6, name: "iJoy Bar IC8000", category: "12000", promo: false, rating: 4.5, price: 55, img: "https://via.placeholder.com/300x400?text=iJoy+IC8000" },
+    { id: 7, name: "Elf Bar BC5000 Ultra", category: "12000", promo: true, rating: 4.7, price: 53, oldPrice: 60, img: "https://via.placeholder.com/300x400?text=Elf+Ultra" },
+    { id: 8, name: "Waka soFit 16000", category: "15000", promo: false, rating: 4.6, price: 64, img: "https://via.placeholder.com/300x400?text=Waka+16000" },
+    { id: 9, name: "Geek Bar Pulse 15000", category: "15000", promo: true, rating: 4.8, price: 66, oldPrice: 70, img: "https://via.placeholder.com/300x400?text=Geek+Pulse" },
+    { id: 10, name: "Lost Mary MO20000", category: "15000", promo: false, rating: 4.7, price: 69, img: "https://via.placeholder.com/300x400?text=MO20000" },
+    { id: 11, name: "Lost Mary Turbo 20000", category: "20000", promo: false, rating: 4.6, price: 74, img: "https://via.placeholder.com/300x400?text=Turbo+20000" },
+    { id: 12, name: "TMT Vape 20000", category: "20000", promo: false, rating: 4.5, price: 72, img: "https://via.placeholder.com/300x400?text=TMT+20000" },
+    { id: 13, name: "iJoy Bar Turbo 20000", category: "20000", promo: false, rating: 4.6, price: 70, img: "https://via.placeholder.com/300x400?text=iJoy+Turbo" },
+    { id: 14, name: "Waka soPro Z 20000", category: "20000", promo: true, rating: 4.8, price: 75, oldPrice: 80, img: "https://via.placeholder.com/300x400?text=Z+20000" }
+  ];
+
+  // Go home (clear URL)
+  function goHome() {
+    history.pushState(null, '', window.location.pathname);
+    init();
+  }
+
+  // Gestion panier dans localStorage
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  // Save cart to localStorage
+  function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  // Récupère la catégorie dans l'URL
+  function getCategoryFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('cat') || 'all';
+  }
+
+  // Sélections de goûts et nicotine
+  const flavors = [
+    "Strawberry Ice",
+    "Mango Ice",
+    "Pineapple Ice",
+    "Grape Ice",
+    "Cola Ice",
+    "Lychee Ice",
+    "Blueberry Ice"
+  ];
+  const nicotineLevels = ["0%", "5%"];
+
+  // Filtrages globaux
+  let currentCategory = getCategoryFromURL();
+  let searchTerm = '';
+  let filterPrice = 'none';
+  let filterRating = 'none';
+
+  // Écouteurs filtres et recherche
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      searchTerm = e.target.value.toLowerCase();
+      renderProducts();
+    });
+    document.getElementById('filter-price').addEventListener('change', (e) => {
+      filterPrice = e.target.value;
+      renderProducts();
+    });
+    document.getElementById('filter-rating').addEventListener('change', (e) => {
+      filterRating = e.target.value;
+      renderProducts();
+    });
+
+    window.onpopstate = () => {
+      currentCategory = getCategoryFromURL();
+      renderProducts();
     }
 
     renderProducts();
-  </script>
-</body>
-</html>
+    updateCartUI();
+
+    // Panier modal close
+    document.getElementById('cart-close').addEventListener('click', closeCart);
+    document.getElementById('cart-modal').addEventListener('click', (e) => {
+      if(e.target.id === 'cart-modal') closeCart();
+    });
+  });
+
+  // Ouvre la fenêtre panier
+  function openCart() {
+    document.getElementById('cart-modal').classList.add('active');
+    renderCart();
+  }
+  // Ferme la fenêtre panier
+  function closeCart() {
+    document.getElementById('cart-modal').classList.remove('active');
+  }
+
+  // Ouvre une alerte pour inscription (placeholder)
+  function openSignup() {
+    alert("Formulaire d'inscription non implémenté.");
+  }
+
+  // Rendu des étoiles
+  function renderStars(rating) {
+    let stars = '';
+    const fullStars = Math.floor(rating);
+    const halfStar = rating - fullStars >= 0.5;
+    for(let i=0; i<fullStars; i++) stars += '★';
+    if(halfStar) stars += '☆';
+    while(stars.length < 5) stars += '☆';
+    return stars;
+  }
+
+  // Filtrage principal
+  function filterProductsList() {
+    let filtered = products;
+
+    // Catégorie
+    if(currentCategory && currentCategory !== 'all') {
+      if(currentCategory === 'promo') {
+        filtered = filtered.filter(p => p.promo);
+      } else {
+        filtered = filtered.filter(p => p.category === currentCategory);
+      }
+    }
+
+    // Recherche texte
+    if(searchTerm) {
+      filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm));
+    }
+
+    // Filtrer par note
+    if(filterRating !== 'none') {
+      let minRating = 0;
+      if(filterRating === '4.5plus') minRating = 4.5;
+      else if(filterRating === '4.7plus') minRating = 4.7;
+      else if(filterRating === '4.8plus') minRating = 4.8;
+      filtered = filtered.filter(p => p.rating >= minRating);
+    }
+
+    // Filtrer par prix
+    if(filterPrice !== 'none') {
+      if(filterPrice === 'asc') {
+        filtered = filtered.slice().sort((a,b) => a.price - b.price);
+      } else if(filterPrice === 'desc') {
+        filtered = filtered.slice().sort((a,b) => b.price - a.price);
+      }
+    }
+
+    return filtered;
+  }
+
+  // Render produits
+  function renderProducts() {
+    const container = document.getElementById('products');
+    container.innerHTML = '';
+
+    const filteredProducts = filterProductsList();
+
+    if(filteredProducts.length === 0) {
+      container.innerHTML = '<p>Aucun produit ne correspond à vos critères.</p>';
+      return;
+    }
+
+    filteredProducts.forEach(product => {
+      const card = document.createElement('div');
+      card.classList.add('product-card');
+
+      if(product.promo) {
+        const badge = document.createElement('div');
+        badge.className = 'product-badge';
+        badge.textContent = 'Promo';
+        card.appendChild(badge);
+      }
+
+      const img = document.createElement('img');
+      img.src = product.img;
+      img.alt = product.name;
+      card.appendChild(img);
+
+      const name = document.createElement('div');
+      name.className = 'product-name';
+      name.textContent = product.name;
+      card.appendChild(name);
+
+      const rating = document.createElement('div');
+      rating.className = 'product-rating';
+      rating.textContent = renderStars(product.rating) + ` (${product.rating.toFixed(1)})`;
+      card.appendChild(rating);
+
+      const priceWrap = document.createElement('div');
+      priceWrap.style.marginBottom = '6px';
+
+      if(product.oldPrice) {
+        const oldPrice = document.createElement('span');
+        oldPrice.className = 'product-old-price';
+        oldPrice.textContent = `€${product.oldPrice.toFixed(2)}`;
+        priceWrap.appendChild(oldPrice);
+      }
+
+      const price = document.createElement('span');
+      price.className = 'product-price';
+      price.textContent = `€${product.price.toFixed(2)}`;
+      priceWrap.appendChild(price);
+
+      card.appendChild(priceWrap);
+
+      // Select save options (flavor and nicotine)
+      const optionDiv = document.createElement('div');
+      optionDiv.className = 'option-select';
+
+      // Goût
+      const flavorLabel = document.createElement('label');
+      flavorLabel.setAttribute('for', `flavor-${product.id}`);
+      flavorLabel.textContent = "Goût :";
+      optionDiv.appendChild(flavorLabel);
+      const flavorSelect = document.createElement('select');
+      flavorSelect.id = `flavor-${product.id}`;
+      flavors.forEach(flavor => {
+        const opt = document.createElement('option');
+        opt.value = flavor;
+        opt.textContent = flavor;
+        flavorSelect.appendChild(opt);
+      });
+      optionDiv.appendChild(flavorSelect);
+
+      // Nicotine
+      const nicLabel = document.createElement('label');
+      nicLabel.setAttribute('for', `nicotine-${product.id}`);
+      nicLabel.textContent = "Nicotine :";
+      optionDiv.appendChild(nicLabel);
+      const nicSelect = document.createElement('select');
+      nicSelect.id = `nicotine-${product.id}`;
+      nicotineLevels.forEach(level => {
+        const opt = document.createElement('option');
+        opt.value = level;
+        opt.textContent = level;
+        nicSelect.appendChild(opt);
+      });
+      optionDiv.appendChild(nicSelect);
+
+      card.appendChild(optionDiv);
+
+      // Bouton ajouter au panier
+      const addBtn = document.createElement('button');
+      addBtn.className = 'add-btn';
+      addBtn.textContent = "Ajouter au panier";
+      addBtn.onclick = () => {
+        addToCart(product.id, flavorSelect.value, nicSelect.value);
+      };
+      card.appendChild(addBtn);
+
+      container.appendChild(card);
+    });
+  }
+
+  // Ajouter produit au panier
+  function addToCart(productId, flavor, nicotine) {
+    const product = products.find(p => p.id === productId);
+    if(!product) return alert("Produit introuvable");
+
+    // Vérifier si même produit + goût + nicotine existe déjà dans panier
+    const existingIndex = cart.findIndex(item =>
+      item.product.id === productId &&
+      item.flavor === flavor &&
+      item.nicotine === nicotine
+    );
+    if(existingIndex > -1) {
+      cart[existingIndex].qty += 1;
+    } else {
+      cart.push({ product, flavor, nicotine, qty: 1 });
+    }
+    saveCart();
+    updateCartUI();
+    alert(`Ajouté au panier: ${product.name} - ${flavor} - Nicotine ${nicotine}`);
+  }
+
+  // Mise à jour UI bouton panier (ex: nombre d'articles)
+  function updateCartUI() {
+    // ici tu peux par exemple modifier l’icône panier pour afficher le nombre d’items
+    // exemple (non fait ici)
+  }
+
+  // Rendu panier dans modal
+  function renderCart() {
+    const cartList = document.getElementById('cart-list');
+    const totalElem = document.getElementById('cart-total');
+    cartList.innerHTML = '';
+
+    if(cart.length === 0) {
+      cartList.innerHTML = '<p>Votre panier est vide.</p>';
+      totalElem.textContent = "Total: €0.00";
+      // Clear paypal button
+      document.getElementById('paypal-button-container').innerHTML = '';
+      return;
+    }
+
+    let total = 0;
+
+    cart.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+
+      const img = document.createElement('img');
+      img.src = item.product.img;
+      img.alt = item.product.name;
+      div.appendChild(img);
+
+      const info = document.createElement('div');
+      info.className = 'cart-item-info';
+
+      const name = document.createElement('div');
+      name.className = 'cart-item-name';
+      name.textContent = item.product.name;
+      info.appendChild(name);
+
+      const details = document.createElement('div');
+      details.className = 'cart-item-details';
+      details.textContent = `Goût: ${item.flavor} | Nicotine: ${item.nicotine}`;
+      info.appendChild(details);
+
+      const qty = document.createElement('div');
+      qty.className = 'cart-item-qty';
+      qty.textContent = `Quantité: ${item.qty}`;
+      info.appendChild(qty);
+
+      div.appendChild(info);
+
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'cart-item-remove';
+      removeBtn.title = "Retirer cet article";
+      removeBtn.innerHTML = '&times;';
+      removeBtn.onclick = () => {
+        removeFromCart(idx);
+      };
+      div.appendChild(removeBtn);
+
+      cartList.appendChild(div);
+
+      total += item.product.price * item.qty;
+    });
+
+    totalElem.textContent = `Total: €${total.toFixed(2)}`;
+
+    renderPaypalButton(total);
+  }
+
+  // Supprimer item panier
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    saveCart();
+    renderCart();
+  }
+
+  // Intégration bouton PayPal
+  function renderPaypalButton(amount) {
+    const container = document.getElementById('paypal-button-container');
+    container.innerHTML = ''; // reset
+
+    if(amount <= 0) return;
+
+    paypal.Buttons({
+      style: {
+        shape: 'rect',
+        color: 'blue',
+        layout: 'vertical',
+        label: 'paypal',
+      },
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: amount.toFixed(2),
+              currency_code: 'EUR'
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert('Paiement réussi par ' + details.payer.name.given_name);
+          cart.length = 0; // vide panier
+          saveCart();
+          renderCart();
+          closeCart();
+        });
+      }
+    }).render('#paypal-button-container');
+  }
+
+  // Sauvegarde panier localStorage
+  function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+  
+  // Chargement panier au lancement
+  function loadCart() {
+    const saved = localStorage.getItem('cart');
+    if(saved) {
+      try {
+        cart = JSON.parse(saved);
+      } catch {
+        cart = [];
+      }
+    } else {
+      cart = [];
+    }
+  }
+
+  // Initialisation variables
+  let cart = [];
+  const flavors = [
+    "Strawberry Ice",
+    "Mango Ice",
+    "Pineapple Ice",
+    "Grape Ice",
+    "Cola Ice",
+    "Lychee Ice",
+    "Blueberry Ice"
+  ];
+  const nicotineLevels = ["0%", "5%"];
+
+  let currentCategory = 'all';
+  let searchTerm = '';
+  let filterPrice = 'none';
+  let filterRating = 'none';
+
+  // Extra : get category from URL hash for deep linking
+  function getCategoryFromURL() {
+    const hash = window.location.hash.replace('#','');
+    return hash ? hash : 'all';
+  }
+
+  // Navigation categories
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const cat = link.getAttribute('data-category');
+      currentCategory = cat;
+      history.pushState(null, '', `#${cat}`);
+      renderProducts();
+    });
+  });
+
+  // Load cart on start
+  loadCart();
+  renderProducts();
+  updateCartUI();
+})();</script>
+
+<style>
+  /* Add CSS changes for the new buttons and filters if needed */
+  .option-select {
+    margin: 10px 0;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .option-select label {
+    font-weight: 600;
+    margin-right: 4px;
+    white-space: nowrap;
+  }
+  select {
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+</style>
