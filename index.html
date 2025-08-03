@@ -1,291 +1,187 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CROSSPUFFS - Vente de puffs</title>
-<style>
-  body {
-    margin: 0; padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #121212;
-    color: #eee;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-  }
-
-  header {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 900;
-    font-size: 3rem;
-    color: #00ff99;
-    padding: 20px 0 10px;
-    text-align: center;
-    user-select: none;
-  }
-
-  /* Conteneur général pour catégorie + produits mis en page */
-  #container {
-    display: flex;
-    width: 100%;
-    max-width: 1200px;
-    padding: 0 20px 40px;
-    gap: 40px;
-  }
-
-  /* Colonne catégorie */
-  #categories {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    min-width: 90px;
-    user-select: none;
-  }
-
-  #categories div {
-    font-weight: 700;
-    font-size: 1.4rem;
-    color: #00ff99;
-    border: 2px solid #00ff99;
-    border-radius: 14px;
-    padding: 6px 12px;
-    cursor: pointer;
-    text-align: center;
-    transition: background-color 0.3s, color 0.3s;
-  }
-
-  #categories div:hover,
-  #categories .active {
-    background-color: #00ff99;
-    color: #121212;
-  }
-
-  /* Zone produits d'aperçu à droite de la colonne */
-  #preview-products {
-    flex-grow: 1;
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  /* Carte produit */
-  .product-card {
-    background: #1f1f1f;
-    border-radius: 12px;
-    box-shadow: 0 0 15px #00ff99aa;
-    padding: 15px;
-    width: 150px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    user-select: none;
-    transition: transform 0.2s ease;
-  }
-  .product-card:hover {
-    transform: scale(1.05);
-  }
-  .product-name {
-    font-weight: 700;
-    font-size: 1rem;
-    margin-top: 10px;
-    color: #00ff99;
-    text-align: center;
-  }
-  .product-price {
-    margin-top: 8px;
-    font-weight: 700;
-    font-size: 0.9rem;
-  }
-
-  /* Section complète produits par catégorie (initialement cachée) */
-  #category-page {
-    width: 100%;
-    max-width: 1200px;
-    padding: 20px;
-    display: none;
-    flex-direction: column;
-  }
-
-  #category-page h2 {
-    color: #00ff99;
-    margin-bottom: 20px;
-    user-select: none;
-  }
-
-  #category-products {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-    gap: 20px;
-  }
-
-  /* Bouton retour */
-  #back-btn {
-    align-self: flex-start;
-    background: #00ff99;
-    border: none;
-    border-radius: 10px;
-    padding: 8px 16px;
-    color: #121212;
-    font-weight: 700;
-    cursor: pointer;
-    margin-bottom: 20px;
-    user-select: none;
-  }
-  #back-btn:hover {
-    background: #33ffaa;
-  }
-
-  /* Responsive */
-  @media (max-width: 700px) {
-    #container {
-      flex-direction: column;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CROSSPUFFS - Vente de puffs</title>
+  <script src="https://www.paypal.com/sdk/js?client-id=AYDLOfQ6t8pMJMCwDKJ2cvzRZTxaQR6MODivqKA8_jmDedJRMrfK1XK9dtGvrhOdF6Hnwny9oMMxPCT0&currency=EUR"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f7f7f7;
+      color: #333;
+    }
+    header {
+      background: #00ff99;
+      color: #121212;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 2.5rem;
+      padding: 20px;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      padding: 0 10px 30px;
+      padding: 10px 20px;
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    #categories {
-      flex-direction: row;
-      gap: 10px;
-      min-width: auto;
-      margin-bottom: 20px;
+    .cart-btn {
+      background: #00ff99;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #121212;
     }
-    #categories div {
-      font-size: 1.2rem;
-      padding: 6px 10px;
+    #products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    #preview-products {
+    .product-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #ccc;
+      padding: 15px;
+      text-align: center;
+    }
+    .product-name {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .product-price {
+      margin: 8px 0;
+      color: #00aa66;
+      font-weight: bold;
+    }
+    .add-btn {
+      background: #00ff99;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #121212;
+    }
+    #cart-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
       justify-content: center;
+      align-items: center;
     }
-    #category-products {
-      grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
+    #cart-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
     }
-  }
-</style>
+    .cart-item {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
 </head>
 <body>
+  <header>CROSSPUFFS</header>
+  <nav>
+    <div>Catégories : 9K / 10K / 12K / 15K / 20K</div>
+    <button class="cart-btn" onclick="openCart()">🛒 Mon Panier</button>
+  </nav>
 
-<header>CROSSPUFFS</header>
+  <div id="products"></div>
 
-<div id="container">
-
-  <div id="categories">
-    <div data-cat="9k">( 9k )</div>
-    <div data-cat="10k">( 10k )</div>
-    <div data-cat="12k">( 12k-13k )</div>
-    <div data-cat="15k">( 15k-16k )</div>
-    <div data-cat="18k">( 18k-20k+ )</div>
+  <div id="cart-modal">
+    <div id="cart-content">
+      <h3>Votre panier</h3>
+      <div id="cart-items"></div>
+      <div id="paypal-button-container"></div>
+      <button onclick="closeCart()" class="cart-btn" style="margin-top:15px;">Fermer</button>
+    </div>
   </div>
 
-  <div id="preview-products">
-    <!-- Premier produit de chaque catégorie affiché ici -->
-  </div>
-</div>
+  <script>
+    const products = [
+      {id: 'randm-9000', name: 'RandM Tornado 9000', price: 45},
+      {id: 'oxbar-10k', name: 'OXBAR Magic Maze Pro', price: 55},
+      {id: 'komodo-v-mod-12k', name: 'Komodo V-Mod 12K', price: 60},
+      {id: 'lost-mary-mt-15k', name: 'Lost Mary MT 15K Turbo', price: 65},
+      {id: 'waka-20k', name: 'Waka SoPro 20K', price: 75},
+    ];
 
-<!-- Page catégorie complète -->
-<section id="category-page">
-  <button id="back-btn">← Retour</button>
-  <h2 id="category-title"></h2>
-  <div id="category-products"></div>
-</section>
+    const cart = [];
 
-<script>
-// Données produits (exemple avec 2-3 produits par catégorie pour démonstration)
-const productsData = {
-  "9k": [
-    {id: 'randm-9000', name:"RandM Tornado 9000", price: 45},
-    {id: 'sunfire-9000', name:"Sunfire Tornado 9000", price: 45},
-    {id: 'tornado-puff-9000', name:"Tornado Puff 9000 (OEM)", price: 45},
-  ],
-  "10k": [
-    {id: 'oxbar-10k', name:"OXBAR Magic Maze Pro", price: 55},
-    {id: 'chillax-neo-x', name:"Chillax Neo X", price: 55},
-  ],
-  "12k": [
-    {id: 'komodo-v-mod-12k', name:"Komodo V-Mod 12K", price: 60},
-    {id: 'randm-tornado-12k', name:"RandM Tornado 12K", price: 60},
-  ],
-  "15k": [
-    {id: 'lost-mary-mt-15k', name:"Lost Mary MT 15K Turbo", price: 65},
-    {id: 'snowwolf-smart-hd', name:"Snowwolf Smart HD", price: 65},
-  ],
-  "18k": [
-    {id: 'randm-tornado-18k', name:"RandM Tornado 18K", price: 70},
-    {id: 'zovoo-dragbar-20k', name:"ZOVOO Dragbar 20K+", price: 75},
-  ]
-};
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+      cart.push(product);
+      alert(product.name + " ajouté au panier !");
+    }
 
-const categoriesElems = document.querySelectorAll('#categories div');
-const previewContainer = document.getElementById('preview-products');
-const categoryPage = document.getElementById('category-page');
-const container = document.getElementById('container');
-const categoryTitle = document.getElementById('category-title');
-const categoryProducts = document.getElementById('category-products');
-const backBtn = document.getElementById('back-btn');
+    function openCart() {
+      document.getElementById('cart-items').innerHTML = '';
+      cart.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.textContent = `${item.name} - ${item.price} €`;
+        document.getElementById('cart-items').appendChild(div);
+      });
 
-function clearActiveCategory() {
-  categoriesElems.forEach(el => el.classList.remove('active'));
-}
+      document.getElementById('cart-modal').style.display = 'flex';
 
-// Affiche le premier produit de chaque catégorie dans preview
-function showPreviewProducts() {
-  previewContainer.innerHTML = '';
-  for(const cat in productsData){
-    const prod = productsData[cat][0];
-    if(!prod) continue;
-    const card = createProductCard(prod);
-    card.onclick = () => openCategory(cat);
-    previewContainer.appendChild(card);
-  }
-}
+      paypal.Buttons({
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: cart.reduce((sum, item) => sum + item.price, 0).toString()
+              }
+            }]
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            alert('Merci ' + details.payer.name.given_name + '! Paiement réussi.');
+            cart.length = 0;
+            closeCart();
+          });
+        }
+      }).render('#paypal-button-container');
+    }
 
-// Crée une carte produit simple
-function createProductCard(product){
-  const card = document.createElement('div');
-  card.className = 'product-card';
-  card.title = product.name + ' - ' + product.price + ' €';
-  card.innerHTML = `
-    <div class="product-name">${product.name}</div>
-    <div class="product-price">${product.price} €</div>
-  `;
-  return card;
-}
+    function closeCart() {
+      document.getElementById('cart-modal').style.display = 'none';
+    }
 
-// Ouvre la page catégorie complète
-function openCategory(cat){
-  clearActiveCategory();
-  const catElem = [...categoriesElems].find(e => e.dataset.cat === cat);
-  if(catElem) catElem.classList.add('active');
+    function renderProducts() {
+      const container = document.getElementById('products');
+      products.forEach(prod => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <div class="product-name">${prod.name}</div>
+          <div class="product-price">${prod.price} €</div>
+          <button class="add-btn" onclick="addToCart('${prod.id}')">Ajouter au panier</button>
+        `;
+        container.appendChild(card);
+      });
+    }
 
-  // Cache la partie preview, affiche la page catégorie
-  container.style.display = 'none';
-  categoryPage.style.display = 'flex';
-
-  categoryTitle.textContent = `( ${cat} ) - Produits`;
-  categoryProducts.innerHTML = '';
-
-  productsData[cat].forEach(prod => {
-    const card = createProductCard(prod);
-    categoryProducts.appendChild(card);
-  });
-}
-
-// Retour à la preview
-backBtn.onclick = () => {
-  categoryPage.style.display = 'none';
-  container.style.display = 'flex';
-  clearActiveCategory();
-};
-
-// Ajout click sur catégories pour ouvrir page complète
-categoriesElems.forEach(elem => {
-  elem.addEventListener('click', () => openCategory(elem.dataset.cat));
-});
-
-// Initialisation
-showPreviewProducts();
-</script>
-
+    renderProducts();
+  </script>
 </body>
 </html>
