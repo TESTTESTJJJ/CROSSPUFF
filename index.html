@@ -5,155 +5,464 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>CROSSPUFFS - Vente de puffs en gros</title>
 <style>
-  body {
-    background: #121212;
-    color: white;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0; padding: 20px;
-  }
-  header {
-    text-align: center;
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: #00ff99;
-    letter-spacing: 0.15em;
-    margin-bottom: 40px;
-    font-family: 'Orbitron', sans-serif;
-  }
-  .products-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 25px;
-    justify-content: center;
-  }
-  .product {
-    background: #1f1f1f;
-    border-radius: 12px;
-    box-shadow: 0 0 12px #00ff99aa;
-    padding: 20px;
-    max-width: 320px;
-    flex: 1 1 300px;
-  }
-  .product h2 {
-    margin-top: 0;
-    font-size: 1.7rem;
-    color: #00ff99;
-  }
-  .product p {
-    line-height: 1.4;
-    font-size: 0.95rem;
-    color: #ccc;
-  }
-  .price-info {
-    font-weight: 700;
-    margin-top: 12px;
-    font-size: 1.1rem;
-    color: #fff;
-  }
-  label, select {
-    margin-top: 10px;
-    display: block;
-    font-weight: 600;
-  }
-  select {
-    margin-bottom: 10px;
-    width: 100%;
-    padding: 8px 10px;
-    border-radius: 6px;
-    border: none;
-    font-size: 1rem;
-    background: #333;
-    color: white;
-  }
-  .total {
-    font-weight: 700;
-    font-size: 1.1rem;
-    margin-bottom: 15px;
-    color: #00ff99;
-  }
-  .paypal-button-container {
-    margin-top: 8px;
-  }
+body {
+  background: #121212;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0; padding: 20px;
+}
+header {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: white;
+  letter-spacing: 0.15em;
+  margin-bottom: 40px;
+  font-family: 'Orbitron', sans-serif;
+}
+.section-title {
+  margin-top: 50px;
+  font-size: 2rem;
+  color: #00ff99;
+  border-bottom: 2px solid #00ff99;
+  padding-bottom: 8px;
+  text-align: center;
+}
+.products-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: center;
+  margin-top: 20px;
+}
+.product {
+  background: #1f1f1f;
+  border-radius: 12px;
+  box-shadow: 0 0 12px #00ff99aa;
+  padding: 20px;
+  max-width: 320px;
+  flex: 1 1 300px;
+}
+.product h2 {
+  margin-top: 0;
+  font-size: 1.7rem;
+  color: #00ff99;
+}
+.product p {
+  line-height: 1.4;
+  font-size: 0.95rem;
+  color: #ccc;
+}
+.price-info {
+  font-weight: 700;
+  margin-top: 12px;
+  font-size: 1.1rem;
+  color: #fff;
+}
+label, select {
+  margin-top: 10px;
+  display: block;
+  font-weight: 600;
+}
+select {
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+  background: #333;
+  color: white;
+}
+.total {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  color: #00ff99;
+}
+.paypal-button-container {
+  margin-top: 8px;
+}
 </style>
 </head>
 <body>
 
 <header>CROSSPUFFS</header>
-<div class="products-container" id="products-container"></div>
 
-<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=EUR"></script>
-
-<script>
-// Tableau des produits
-const products = [
-  {id: "puff9k", name: "Puff 9K", desc: "9000 bouffées – Jetable rechargeable – Port USB-C<br>Double arôme – Format compact – Saveur intense", price: 45},
-  {id: "puff15k", name: "Puff 15K", desc: "15000 bouffées – Écran LCD – Airflow réglable<br>Port USB-C – Saveurs longues durée – Rechargeable", price: 45},
-  {id: "puff22k", name: "Puff 22K", desc: "22000 bouffées – Autonomie extrême – Format box lumineux<br>Saveurs explosives – Port USB-C – Rechargeable", price: 45},
-  {id: "puffice", name: "Puff Ice Menthe", desc: "Menthe glaciale – Format stick fin – Jetable<br>Sans nicotine – Design LED lumineux", price: 50},
-  {id: "puffmangue", name: "Puff Mangue", desc: "Saveur mangue sucrée – Format box rechargeable<br>Recharge USB-C – Saveur intense et durable", price: 50},
-  {id: "puffnicotine", name: "Puff Sans Nicotine", desc: "1200 bouffées – Format box rechargeable – Saveur fruits rouges<br>0 mg nicotine – Recharge USB-C – Usage multiple", price: 40}
-];
-
-// Fonction de calcul des prix avec remise
-function calculatePrice(basePrice, qty) {
-  if (qty >= 10) return basePrice * qty * 0.82; // -18% + 1 offert
-  if (qty >= 5) return basePrice * qty * 0.89;  // -11%
-  if (qty >= 3) return basePrice * qty * 0.90;  // -10%
-  return basePrice * qty;
-}
-
-// Création dynamique des produits HTML
-const container = document.getElementById("products-container");
-products.forEach(p => {
-  const prodDiv = document.createElement("div");
-  prodDiv.className = "product";
-  prodDiv.dataset.baseprice = p.price;
-  prodDiv.innerHTML = `
-    <h2>${p.name}</h2>
-    <p>${p.desc}</p>
-    <p class="price-info">Prix : ${p.price} € / carton de 10</p>
-    <label for="qty-${p.id}">Quantité :</label>
-    <select id="qty-${p.id}" class="qty-select">
+<!-- Catégorie 9000 puffs -->
+<h2 class="section-title">Vapes jetables 9000 puffs populaires</h2>
+<div class="products-container">
+  <div class="product" data-baseprice="45">
+    <h2>RandM Tornado 9000</h2>
+    <p>9000 bouffées – Vape jetable compacte, grande autonomie et saveur intense</p>
+    <p class="price-info">Prix : 45 € / carton de 10</p>
+    <label for="qty-randm9000">Quantité :</label>
+    <select id="qty-randm9000" class="qty-select">
       <option value="1">1 carton</option>
       <option value="3">3 cartons (-10%)</option>
       <option value="5">5 cartons (-11%)</option>
       <option value="10">10 cartons (-18%) + 1 offert</option>
     </select>
-    <p class="total">Total : <span id="total-${p.id}">${p.price.toFixed(2)}</span> €</p>
-    <div id="paypal-button-${p.id}" class="paypal-button-container"></div>
-  `;
-  container.appendChild(prodDiv);
-});
+    <p class="total">Total : <span id="total-randm9000">45.00</span> €</p>
+    <div id="paypal-button-randm9000" class="paypal-button-container"></div>
+  </div>
 
-// Initialisation des produits : gestion quantité + PayPal
-function setupProduct(qtyId, totalId, paypalId, productName, basePrice) {
-  const qtySelect = document.getElementById(qtyId);
-  const totalSpan = document.getElementById(totalId);
+  <div class="product" data-baseprice="45">
+    <h2>Sunfire Tornado 9000</h2>
+    <p>9000 bouffées – Compact, design moderne et saveurs variées</p>
+    <p class="price-info">Prix : 45 € / carton de 10</p>
+    <label for="qty-sunfire9000">Quantité :</label>
+    <select id="qty-sunfire9000" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-sunfire9000">45.00</span> €</p>
+    <div id="paypal-button-sunfire9000" class="paypal-button-container"></div>
+  </div>
 
+  <div class="product" data-baseprice="45">
+    <h2>Tornado Puff 9000 (OEM)</h2>
+    <p>9000 bouffées – Modèle OEM fiable, autonomie et compacité optimales</p>
+    <p class="price-info">Prix : 45 € / carton de 10</p>
+    <label for="qty-tornadooem9000">Quantité :</label>
+    <select id="qty-tornadooem9000" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-tornadooem9000">45.00</span> €</p>
+    <div id="paypal-button-tornadooem9000" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="45">
+    <h2>VAPEN Mars 9000</h2>
+    <p>9000 bouffées – Excellente durée, saveurs riches et authentiques</p>
+    <p class="price-info">Prix : 45 € / carton de 10</p>
+    <label for="qty-vapenmars9000">Quantité :</label>
+    <select id="qty-vapenmars9000" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-vapenmars9000">45.00</span> €</p>
+    <div id="paypal-button-vapenmars9000" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="45">
+    <h2>Enjoy Ultra 9000</h2>
+    <p>9000 bouffées – Format ultra compact, saveur intense, design élégant</p>
+    <p class="price-info">Prix : 45 € / carton de 10</p>
+    <label for="qty-enjoyultra9000">Quantité :</label>
+    <select id="qty-enjoyultra9000" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-enjoyultra9000">45.00</span> €</p>
+    <div id="paypal-button-enjoyultra9000" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="45">
+    <h2>Chrome Bar 9000 Puff Disposable</h2>
+    <p>9000 bouffées – Design chromé, saveurs variées, autonomie fiable</p>
+    <p class="price-info">Prix : 45 € / carton de 10</p>
+    <label for="qty-chromebar9000">Quantité :</label>
+    <select id="qty-chromebar9000" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-chromebar9000">45.00</span> €</p>
+    <div id="paypal-button-chromebar9000" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="45">
+    <h2>Snowwolf 9000 (jetable rechargeable)</h2>
+    <p>9000 bouffées – Rechargeable, autonomie longue, design premium</p>
+    <p class="price-info">Prix : 45 € / carton de 10</p>
+    <label for="qty-snowwolf9000">Quantité :</label>
+    <select id="qty-snowwolf9000" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-snowwolf9000">45.00</span> €</p>
+    <div id="paypal-button-snowwolf9000" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="45">
+    <h2>Feelm Max 9000 Puff</h2>
+    <p>9000 bouffées – Utilisé dans certains modèles personnalisés ou grossistes</p>
+    <p class="price-info">Prix : 45 € / carton de 10</p>
+    <label for="qty-feelmmax9000">Quantité :</label>
+    <select id="qty-feelmmax9000" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-feelmmax9000">45.00</span> €</p>
+    <div id="paypal-button-feelmmax9000" class="paypal-button-container"></div>
+  </div>
+</div>
+
+<!-- Catégorie 10 000 puffs -->
+<h2 class="section-title">Vapes jetables 10 000 puffs populaires</h2>
+<div class="products-container">
+  <div class="product" data-baseprice="45">
+    <h2>OXBAR Magic Maze Pro – 10 000 puffs</h2>
+    <p>10 000 bouffées – Écran LCD, réglages de puissance avancés</p>
+    <p class="price-info">Prix : 45 € / carton de 10</p>
+    <label for="qty-oxbar10000">Quantité :</label>
+    <select id="qty-oxbar10000" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-oxbar10000">45.00</span> €</p>
+    <div id="paypal-button-oxbar10000" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="45">
+    <h2>Chillax Neo X – 10 000 puffs</h2>
+    <p>10 000 bouffées – Autonomie longue, design élégant</p>
+    <p class="price-info">Prix : 45 € / carton de 10</p>
+    <label for="qty-chillax10000">Quantité :</label>
+    <select id="qty-chillax10000" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-chillax10000">45.00</span> €</p>
+    <div id="paypal-button-chillax10000" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="45">
+    <h2>Snowwolf Smart 10K – 10 000 puffs</h2>
+    <p>10 000 bouffées – Variante HD, rechargeable</p>
+    <p class="price-info">Prix : 45 € / carton de 10</p>
+    <label for="qty-snowwolfsmart10k">Quantité :</label>
+    <select id="qty-snowwolfsmart10k" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-snowwolfsmart10k">45.00</span> €</p>
+    <div id="paypal-button-snowwolfsmart10k" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="45">
+    <h2>Geek Bar Pulse X – 10 000 puffs</h2>
+    <p>10 000 bouffées – Selon mode d’utilisation, saveurs variées</p>
+    <p class="price-info">Prix : 45 € / carton de 10</p>
+    <label for="qty-geekbarpulse10k">Quantité :</label>
+    <select id="qty-geekbarpulse10k" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-geekbarpulse10k">45.00</span> €</p>
+    <div id="paypal-button-geekbarpulse10k" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="45">
+    <h2>Waka Smash 10K – 10 000 puffs</h2>
+    <p>10 000 bouffées – Écran LED intégré, design moderne</p>
+    <p class="price-info">Prix : 45 € / carton de 10</p>
+    <label for="qty-wakasmash10k">Quantité :</label>
+    <select id="qty-wakasmash10k" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-wakasmash10k">45.00</span> €</p>
+    <div id="paypal-button-wakasmash10k" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="45">
+    <h2>Lux Vape X 10K</h2>
+    <p>10 000 bouffées – Luxe et performance, design soigné</p>
+    <p class="price-info">Prix : 45 € / carton de 10</p>
+    <label for="qty-luxvape10k">Quantité :</label>
+    <select id="qty-luxvape10k" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-luxvape10k">45.00</span> €</p>
+    <div id="paypal-button-luxvape10k" class="paypal-button-container"></div>
+  </div>
+</div>
+
+<!-- Catégorie 12-13K puffs -->
+<h2 class="section-title">Vapes jetables 12-13 000 puffs populaires</h2>
+<div class="products-container">
+  <div class="product" data-baseprice="50">
+    <h2>HQD Stark 12K</h2>
+    <p>12 000 bouffées – Saveurs variées, design compact</p>
+    <p class="price-info">Prix : 50 € / carton de 10</p>
+    <label for="qty-hqd12k">Quantité :</label>
+    <select id="qty-hqd12k" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-hqd12k">50.00</span> €</p>
+    <div id="paypal-button-hqd12k" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="50">
+    <h2>OXBAR Frost 13K</h2>
+    <p>13 000 bouffées – Performances et design épuré</p>
+    <p class="price-info">Prix : 50 € / carton de 10</p>
+    <label for="qty-oxbar13k">Quantité :</label>
+    <select id="qty-oxbar13k" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-oxbar13k">50.00</span> €</p>
+    <div id="paypal-button-oxbar13k" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="50">
+    <h2>OXBAR Magic Maze Pro – 13K</h2>
+    <p>13 000 bouffées – Écran LCD, réglages avancés</p>
+    <p class="price-info">Prix : 50 € / carton de 10</p>
+    <label for="qty-oxbarmaze13k">Quantité :</label>
+    <select id="qty-oxbarmaze13k" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-oxbarmaze13k">50.00</span> €</p>
+    <div id="paypal-button-oxbarmaze13k" class="paypal-button-container"></div>
+  </div>
+</div>
+
+<!-- Catégorie 15-16K puffs -->
+<h2 class="section-title">Vapes jetables 15-16 000 puffs populaires</h2>
+<div class="products-container">
+  <div class="product" data-baseprice="55">
+    <h2>RandM Tornado Pro 15K</h2>
+    <p>15 000 bouffées – Modèle Pro, grande autonomie et design</p>
+    <p class="price-info">Prix : 55 € / carton de 10</p>
+    <label for="qty-randmpro15k">Quantité :</label>
+    <select id="qty-randmpro15k" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-randmpro15k">55.00</span> €</p>
+    <div id="paypal-button-randmpro15k" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="55">
+    <h2>OXBAR Magic Maze 16K</h2>
+    <p>16 000 bouffées – Écran LCD, réglages, saveurs riches</p>
+    <p class="price-info">Prix : 55 € / carton de 10</p>
+    <label for="qty-oxbarmaze16k">Quantité :</label>
+    <select id="qty-oxbarmaze16k" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-oxbarmaze16k">55.00</span> €</p>
+    <div id="paypal-button-oxbarmaze16k" class="paypal-button-container"></div>
+  </div>
+</div>
+
+<!-- Catégorie 18-20K puffs -->
+<h2 class="section-title">Vapes jetables 18-20 000 puffs populaires</h2>
+<div class="products-container">
+  <div class="product" data-baseprice="60">
+    <h2>RandM Tornado 20K</h2>
+    <p>20 000 bouffées – Extra grande autonomie</p>
+    <p class="price-info">Prix : 60 € / carton de 10</p>
+    <label for="qty-randm20k">Quantité :</label>
+    <select id="qty-randm20k" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-randm20k">60.00</span> €</p>
+    <div id="paypal-button-randm20k" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="60">
+    <h2>Snowwolf 20K</h2>
+    <p>20 000 bouffées – Rechargeable, autonomie exceptionnelle</p>
+    <p class="price-info">Prix : 60 € / carton de 10</p>
+    <label for="qty-snowwolf20k">Quantité :</label>
+    <select id="qty-snowwolf20k" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-snowwolf20k">60.00</span> €</p>
+    <div id="paypal-button-snowwolf20k" class="paypal-button-container"></div>
+  </div>
+
+  <div class="product" data-baseprice="60">
+    <h2>Vaporesso 20K</h2>
+    <p>20 000 bouffées – Autonomie élevée, qualité Vaporesso</p>
+    <p class="price-info">Prix : 60 € / carton de 10</p>
+    <label for="qty-vaporesso20k">Quantité :</label>
+    <select id="qty-vaporesso20k" class="qty-select">
+      <option value="1">1 carton</option>
+      <option value="3">3 cartons (-10%)</option>
+      <option value="5">5 cartons (-11%)</option>
+      <option value="10">10 cartons (-18%) + 1 offert</option>
+    </select>
+    <p class="total">Total : <span id="total-vaporesso20k">60.00</span> €</p>
+    <div id="paypal-button-vaporesso20k" class="paypal-button-container"></div>
+  </div>
+</div>
+
+<script>
+// Calcul du total selon la quantité et les remises
+document.querySelectorAll('.qty-select').forEach(select => {
+  const productDiv = select.closest('.product');
+  const basePrice = parseFloat(productDiv.getAttribute('data-baseprice'));
+
+  const totalSpan = productDiv.querySelector('.total span');
   function updateTotal() {
-    const qty = parseInt(qtySelect.value);
-    totalSpan.textContent = calculatePrice(basePrice, qty).toFixed(2);
+    const qty = parseInt(select.value, 10);
+    let discount = 0;
+    if (qty === 3) discount = 0.10;
+    else if (qty === 5) discount = 0.11;
+    else if (qty === 10) discount = 0.18;
+
+    // Calcul prix avec remise
+    let price = basePrice * qty;
+    price = price * (1 - discount);
+
+    // Arrondi à 2 décimales
+    totalSpan.textContent = price.toFixed(2);
   }
-  qtySelect.addEventListener("change", updateTotal);
+
+  select.addEventListener('change', updateTotal);
   updateTotal();
-
-  paypal.Buttons({
-    style: { layout: 'vertical', color: 'green', shape: 'rect', label: 'pay' },
-    createOrder: (data, actions) =>
-      actions.order.create({
-        purchase_units: [{
-          description: productName,
-          amount: { currency_code: "EUR", value: calculatePrice(basePrice, parseInt(qtySelect.value)).toFixed(2) }
-        }]
-      }),
-    onApprove: (data, actions) =>
-      actions.order.capture().then(details => alert(`Merci pour votre achat, ${details.payer.name.given_name} !`))
-  }).render('#' + paypalId);
-}
-
-// Setup pour chaque produit
-products.forEach(p => {
-  setupProduct(`qty-${p.id}`, `total-${p.id}`, `paypal-button-${p.id}`, p.name, p.price);
 });
 </script>
 
