@@ -3,536 +3,90 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CROSSPUFFS - Vente de puffs</title>
-<script src="https://www.paypal.com/sdk/js?client-id=AYDLOfQ6t8pMJMCwDKJ2cvzRZTxaQR6MODivqKA8_jmDedJRMrfK1XK9dtGvrhOdF6Hnwny9oMMxPCT0&currency=EUR"></script>
+<title>Produits en Promotion</title>
 <style>
   body {
-    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f7f7f7; color: #333;
+    font-family: Arial, sans-serif;
+    background: #fff;
+    color: #222;
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1rem;
   }
-  header, nav {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 15px 30px; background: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    flex-wrap: wrap;
+  h2 {
+    color: #d9534f; /* rouge promotion */
+    text-align: center;
+    margin-bottom: 1rem;
   }
-  .logo {
-    font-family: 'Orbitron', sans-serif; font-size: 1.8rem;
-    font-weight: bold; color: #00cc88; user-select: none;
-  }
-  .nav-links {
-    display: flex; gap: 15px; flex-wrap: wrap;
-    margin: 10px 0;
-  }
-  .nav-links a {
-    text-decoration: none; color: #333; font-weight: 600;
-    cursor: pointer; padding: 6px 10px; border-radius: 6px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  .nav-links a.active, .nav-links a:hover {
-    background: #00cc88; color: #fff;
-  }
-  .filters {
-    display: flex; gap: 15px; align-items: center; flex-wrap: wrap;
-  }
-  select, input[type=search] {
-    padding: 6px 12px;
-    border-radius: 6px; border: 1px solid #ccc;
-    font-size: 1rem;
-  }
-  #products {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px; padding: 30px; max-width: 1200px;
-    margin: 0 auto 80px;
-  }
-  .product-card {
-    background: #fff; border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    padding: 15px; display: flex; flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-  }
-  .product-badge {
-    background: #3a70e1; color: white; padding: 4px 10px;
-    border-radius: 6px; font-size: 0.8rem;
-    font-weight: bold; position: absolute; top: 10px; left: 10px;
-  }
-  .product-img-wrapper {
-    position: relative;
-  }
-  .product-card img {
-    width: 100%; height: auto; border-radius: 6px;
+  .product {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: #fafafa;
   }
   .product-name {
-    font-weight: bold; font-size: 1.1rem;
-    margin: 10px 0 5px;
-  }
-  .product-rating {
-    color: #f2b01e; font-size: 0.9rem; margin-bottom: 8px;
-  }
-  .price-container {
-    margin-bottom: 10px;
-  }
-  .product-price {
-    font-weight: bold; font-size: 1.2rem; color: #0066cc;
-  }
-  .product-old-price {
-    text-decoration: line-through; color: #aaa;
-    margin-right: 10px;
-  }
-  .option-select {
-    margin-bottom: 10px;
-  }
-  .option-select label {
-    font-weight: 600; margin-right: 8px;
-  }
-  select {
-    padding: 6px 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-  }
-  .add-btn {
-    background: #00cc88; border: none; padding: 10px;
-    border-radius: 6px; cursor: pointer;
-    font-weight: bold; color: white;
-    transition: background-color 0.3s ease;
-  }
-  .add-btn:hover {
-    background: #009966;
-  }
-  /* Panier */
-  #cart-button {
-    position: fixed; bottom: 20px; right: 20px;
-    background: #00cc88; border: none; padding: 15px 20px;
-    border-radius: 50px; font-size: 1.4rem; color: white;
-    cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    z-index: 999;
-  }
-  #cart-modal {
-    position: fixed; top: 0; left: 0; right:0; bottom: 0;
-    background: rgba(0,0,0,0.6);
-    display: none; justify-content: center; align-items: center;
-    z-index: 1000;
-  }
-  #cart-modal.active {
-    display: flex;
-  }
-  #cart-content {
-    background: white; width: 90%; max-width: 600px;
-    max-height: 80vh; overflow-y: auto; border-radius: 10px;
-    padding: 20px; position: relative;
-    display: flex; flex-direction: column;
-  }
-  #cart-content h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
     font-weight: 700;
-    color: #00cc88;
+    font-size: 1.1rem;
+    color: #333;
   }
-  #cart-items {
-    flex-grow: 1;
+  .price {
+    color: #d9534f;
+    font-weight: 700;
+    margin-top: 0.25rem;
   }
-  .cart-item {
-    display: flex; justify-content: space-between;
-    border-bottom: 1px solid #ddd; padding: 10px 0;
+  .shipping {
+    font-size: 0.9rem;
+    color: #5cb85c; /* vert pour livraison gratuite */
+    margin-top: 0.3rem;
   }
-  .cart-item-info {
-    flex-grow: 1;
-  }
-  .cart-item-name {
+  .promotion {
+    font-size: 0.85rem;
     font-weight: 600;
-  }
-  .cart-item-options {
-    font-size: 0.9rem; color: #666;
-  }
-  .cart-item-qty {
-    margin: 0 10px;
-  }
-  .cart-item-remove {
-    cursor: pointer; color: #cc3300;
-    font-weight: 600; border: none; background: none;
-  }
-  #cart-total {
-    margin-top: 15px; font-weight: 700; font-size: 1.2rem;
-    text-align: right; color: #0066cc;
-  }
-  #close-cart {
-    position: absolute; top: 10px; right: 10px;
-    font-size: 1.5rem; background: none; border: none;
-    cursor: pointer; color: #999;
-  }
-  #paypal-button-container {
-    margin-top: 15px;
+    color: #d9534f;
+    margin-top: 0.3rem;
+    text-transform: uppercase;
   }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">CROSSPUFFS</div>
-  <nav class="nav-links">
-    <a href="#all" data-category="all" class="nav-link active">Tous</a>
-    <a href="#promo" data-category="promo" class="nav-link">Nouveautés</a>
-    <a href="#9000" data-category="9000" class="nav-link">9K</a>
-    <a href="#10000" data-category="10000" class="nav-link">10K</a>
-    <a href="#12000" data-category="12000" class="nav-link">12K</a>
-    <a href="#15000" data-category="15000" class="nav-link">15K</a>
-    <a href="#20000" data-category="20000" class="nav-link">20K+</a>
-  </nav>
-  <div class="filters">
-    <label for="filter-price">Filtrer par prix :</label>
-    <select id="filter-price" aria-label="Filtrer par prix">
-      <option value="all">Tous</option>
-      <option value="asc">Prix croissant</option>
-      <option value="desc">Prix décroissant</option>
-    </select>
+<h2>Produits en Promotion</h2>
 
-    <label for="filter-rating">Filtrer par note :</label>
-    <select id="filter-rating" aria-label="Filtrer par note">
-      <option value="all">Tous</option>
-      <option value="4">≥ 4 étoiles</option>
-      <option value="4.5">≥ 4.5 étoiles</option>
-      <option value="5">5 étoiles</option>
-    </select>
-
-    <input type="search" id="search-input" placeholder="Rechercher..." aria-label="Rechercher produit" />
-  </div>
-</header>
-
-<main>
-  <div id="products"></div>
-</main>
-
-<button id="cart-button" aria-label="Ouvrir le panier">🛒</button>
-
-<div id="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cart-title">
-  <div id="cart-content">
-    <button id="close-cart" aria-label="Fermer le panier">×</button>
-    <h2 id="cart-title">Votre panier</h2>
-    <div id="cart-items"></div>
-    <div id="cart-total">Total: 0 €</div>
-    <div id="paypal-button-container"></div>
-  </div>
+<div class="product">
+  <div class="product-name">Tornado Puff 9000 – Lot de 10</div>
+  <div class="price">35€</div>
+  <div class="shipping">Livraison gratuite, livré en 3-4 jours</div>
+  <div class="promotion">En promotion</div>
 </div>
 
-<script>
-  const PRODUCTS = [
-    // Exemple produit complet avec catégories et promo
-    {
-      id: 'puff1',
-      name: 'Disposable Vape 9000 bouffées',
-      category: '9000',
-      price: 24.99,
-      oldPrice: 30.99,
-      rating: 4.5,
-      img: 'https://cdn.shopify.com/s/files/1/0570/4499/2623/products/product-image-1274206611_1024x1024@2x.jpg?v=1689084445',
-      promo: true,
-    },
-    {
-      id: 'puff2',
-      name: 'Disposable Vape 10000 bouffées',
-      category: '10000',
-      price: 28.99,
-      rating: 4.0,
-      img: 'https://cdn.shopify.com/s/files/1/0570/4499/2623/products/product-image-1274206611_1024x1024@2x.jpg?v=1689084445',
-      promo: false,
-    },
-    {
-      id: 'puff3',
-      name: 'Disposable Vape 12000 bouffées',
-      category: '12000',
-      price: 33.50,
-      rating: 4.8,
-      img: 'https://cdn.shopify.com/s/files/1/0570/4499/2623/products/product-image-1274206611_1024x1024@2x.jpg?v=1689084445',
-      promo: false,
-    },
-    {
-      id: 'puff4',
-      name: 'Disposable Vape 15000 bouffées',
-      category: '15000',
-      price: 38.99,
-      rating: 4.9,
-      img: 'https://cdn.shopify.com/s/files/1/0570/4499/2623/products/product-image-1274206611_1024x1024@2x.jpg?v=1689084445',
-      promo: false,
-    },
-    {
-      id: 'puff5',
-      name: 'Disposable Vape 20000+ bouffées',
-      category: '20000',
-      price: 42.99,
-      rating: 5,
-      img: 'https://cdn.shopify.com/s/files/1/0570/4499/2623/products/product-image-1274206611_1024x1024@2x.jpg?v=1689084445',
-      promo: false,
-    },
-    // Ajout d'autres produits ici...
-  ];
+<div class="product">
+  <div class="product-name">BOU MAX B10000 – Lot de 10</div>
+  <div class="price">40€</div>
+  <div class="shipping">Livraison gratuite, livré en 3-4 jours</div>
+  <div class="promotion">En promotion</div>
+</div>
 
-  const FLAVORS = [
-    "Strawberry Ice",
-    "Mango Ice",
-    "Pineapple Ice",
-    "Grape Ice",
-    "Cola Ice",
-    "Lychee Ice",
-    "Blueberry Ice",
-  ];
+<div class="product">
+  <div class="product-name">VAPME 12000 – Lot de 10</div>
+  <div class="price">45€</div>
+  <div class="shipping">Livraison gratuite, livré en 3-4 jours</div>
+  <div class="promotion">En promotion</div>
+</div>
 
-  const NICOTINE_OPTIONS = ["0%", "5%"];
+<div class="product">
+  <div class="product-name">Lost Mary MT15000 Turbo – Lot de 10</div>
+  <div class="price">50€</div>
+  <div class="shipping">Livraison gratuite, livré en 3-4 jours</div>
+  <div class="promotion">En promotion</div>
+</div>
 
-  let currentCategory = "all";
-  let currentPriceFilter = "all";
-  let currentRatingFilter = "all";
-  let currentSearchTerm = "";
+<div class="product">
+  <div class="product-name">RandM Tornado 20000 – Lot de 10</div>
+  <div class="price">52€</div>
+  <div class="shipping">Livraison gratuite, livré en 3-4 jours</div>
+  <div class="promotion">En promotion</div>
+</div>
 
-  // Panier stockage local
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-  const productsContainer = document.getElementById('products');
-  const navLinks = document.querySelectorAll('.nav-link');
-  const filterPrice = document.getElementById('filter-price');
-  const filterRating = document.getElementById('filter-rating');
-  const searchInput = document.getElementById('search-input');
-  const cartButton = document.getElementById('cart-button');
-  const cartModal = document.getElementById('cart-modal');
-  const closeCartBtn = document.getElementById('close-cart');
-  const cartItemsContainer = document.getElementById('cart-items');
-  const cartTotalEl = document.getElementById('cart-total');
-
-  function renderProducts() {
-    let filtered = PRODUCTS.filter(p => {
-      if(currentCategory !== "all" && currentCategory !== "promo" && p.category !== currentCategory) return false;
-      if(currentCategory === "promo" && !p.promo) return false;
-
-      // Filtre note
-      if(currentRatingFilter !== "all" && p.rating < parseFloat(currentRatingFilter)) return false;
-
-      // Filtre recherche
-      if(currentSearchTerm && !p.name.toLowerCase().includes(currentSearchTerm.toLowerCase())) return false;
-
-      return true;
-    });
-
-    // Tri prix
-    if(currentPriceFilter === "asc") filtered.sort((a,b) => a.price - b.price);
-    else if(currentPriceFilter === "desc") filtered.sort((a,b) => b.price - a.price);
-
-    productsContainer.innerHTML = "";
-    if(filtered.length === 0) {
-      productsContainer.innerHTML = "<p>Aucun produit trouvé.</p>";
-      return;
-    }
-    filtered.forEach(product => {
-      const card = document.createElement('div');
-      card.className = 'product-card';
-
-      card.innerHTML = `
-        <div class="product-img-wrapper">
-          <img src="${product.img}" alt="${product.name}" loading="lazy" />
-          ${product.promo ? '<div class="product-badge">Nouveauté</div>' : ''}
-        </div>
-        <div class="product-name">${product.name}</div>
-        <div class="product-rating">${"⭐".repeat(Math.floor(product.rating))} (${product.rating.toFixed(1)})</div>
-        <div class="price-container">
-          ${product.oldPrice ? `<span class="product-old-price">${product.oldPrice.toFixed(2)} €</span>` : ""}
-          <span class="product-price">${product.price.toFixed(2)} €</span>
-        </div>
-        <div class="option-select">
-          <label for="flavor-${product.id}">Goût :</label>
-          <select id="flavor-${product.id}" class="flavor-select" aria-label="Choisir le goût">
-            ${FLAVORS.map(f => `<option value="${f}">${f}</option>`).join('')}
-          </select>
-        </div>
-        <div class="option-select">
-          <label for="nicotine-${product.id}">Nicotine :</label>
-          <select id="nicotine-${product.id}" class="nicotine-select" aria-label="Choisir le taux de nicotine">
-            ${NICOTINE_OPTIONS.map(n => `<option value="${n}">${n}</option>`).join('')}
-          </select>
-        </div>
-        <button class="add-btn" data-id="${product.id}" aria-label="Ajouter ${product.name} au panier">Ajouter au panier</button>
-      `;
-
-      productsContainer.appendChild(card);
-    });
-
-    // Add event listeners for add buttons
-    document.querySelectorAll('.add-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-id');
-        const flavorSelect = document.getElementById(`flavor-${id}`);
-        const nicotineSelect = document.getElementById(`nicotine-${id}`);
-        addToCart(id, flavorSelect.value, nicotineSelect.value);
-      });
-    });
-  }
-
-  function addToCart(productId, flavor, nicotine) {
-    const product = PRODUCTS.find(p => p.id === productId);
-    if(!product) return;
-
-    // Check if item with same options exists
-    const existingIndex = cart.findIndex(item => 
-      item.id === productId && item.flavor === flavor && item.nicotine === nicotine
-    );
-
-    if(existingIndex >= 0) {
-      cart[existingIndex].qty += 1;
-    } else {
-      cart.push({
-        id: productId,
-        name: product.name,
-        price: product.price,
-        flavor,
-        nicotine,
-        qty: 1
-      });
-    }
-    saveCart();
-    renderCart();
-    alert(`${product.name} (${flavor}, Nicotine ${nicotine}) ajouté au panier.`);
-  }
-
-  function saveCart() {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }
-
-  function renderCart() {
-    cartItemsContainer.innerHTML = "";
-    if(cart.length === 0) {
-      cartItemsContainer.innerHTML = "<p>Votre panier est vide.</p>";
-      cartTotalEl.textContent = "Total: 0 €";
-      return;
-    }
-
-    cart.forEach((item, idx) => {
-      const div = document.createElement('div');
-      div.className = 'cart-item';
-      div.innerHTML = `
-        <div class="cart-item-info">
-          <div class="cart-item-name">${item.name}</div>
-          <div class="cart-item-options">Goût: ${item.flavor}, Nicotine: ${item.nicotine}</div>
-        </div>
-        <div>
-          <button class="cart-item-remove" aria-label="Supprimer cet article">×</button>
-          <input class="cart-item-qty" type="number" min="1" value="${item.qty}" aria-label="Quantité" style="width: 50px;"/>
-        </div>
-        <div style="min-width: 70px; text-align:right;">${(item.price * item.qty).toFixed(2)} €</div>
-      `;
-
-      // Remove button
-      div.querySelector('.cart-item-remove').addEventListener('click', () => {
-        cart.splice(idx, 1);
-        saveCart();
-        renderCart();
-      });
-
-      // Qty change
-      div.querySelector('.cart-item-qty').addEventListener('change', e => {
-        let val = parseInt(e.target.value);
-        if(isNaN(val) || val < 1) val = 1;
-        cart[idx].qty = val;
-        saveCart();
-        renderCart();
-      });
-
-      cartItemsContainer.appendChild(div);
-    });
-
-    const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-    cartTotalEl.textContent = `Total: ${total.toFixed(2)} €`;
-  }
-
-  function openCart() {
-    cartModal.classList.add('active');
-    renderCart();
-    renderPaypalButton();
-  }
-
-  function closeCart() {
-    cartModal.classList.remove('active');
-  }
-
-  function renderPaypalButton() {
-    // Clear previous buttons if any
-    const container = document.getElementById('paypal-button-container');
-    container.innerHTML = '';
-
-    const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-    if(total <= 0) return; // Pas de paiement si panier vide
-
-    paypal.Buttons({
-      style: {
-        shape: 'rect',
-        color: 'blue',
-        layout: 'vertical',
-        label: 'paypal',
-      },
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{
-            amount: {
-              currency_code: 'EUR',
-              value: total.toFixed(2),
-            },
-            description: 'Achat sur CROSSPUFFS'
-          }]
-        });
-      },
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-          alert('Paiement effectué avec succès, merci ' + details.payer.name.given_name + ' !');
-          cart = [];
-          saveCart();
-          renderCart();
-          closeCart();
-        });
-      },
-      onError: function(err) {
-        alert('Une erreur est survenue lors du paiement.');
-        console.error(err);
-      }
-    }).render('#paypal-button-container');
-  }
-
-  // Navigation & Filtering handlers
-  navLinks.forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      navLinks.forEach(l => l.classList.remove('active'));
-      link.classList.add('active');
-      currentCategory = link.getAttribute('data-category');
-      renderProducts();
-    });
-  });
-
-  filterPrice.addEventListener('change', () => {
-    currentPriceFilter = filterPrice.value;
-    renderProducts();
-  });
-
-  filterRating.addEventListener('change', () => {
-    currentRatingFilter = filterRating.value;
-    renderProducts();
-  });
-
-  searchInput.addEventListener('input', () => {
-    currentSearchTerm = searchInput.value.trim();
-    renderProducts();
-  });
-
-  cartButton.addEventListener('click', openCart);
-  closeCartBtn.addEventListener('click', closeCart);
-  cartModal.addEventListener('click', (e) => {
-    if(e.target === cartModal) closeCart();
-  });
-
-  // Initial render
-  renderProducts();
-</script>
 </body>
 </html>
