@@ -3,357 +3,289 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CROSSPUFFS - Vente de puffs en gros</title>
+<title>CROSSPUFFS - Vente de puffs</title>
 <style>
-  /* Reset basique */
-  * {
-    box-sizing: border-box;
-  }
   body {
     margin: 0; padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #121212;
     color: #eee;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
-  }
-  a {
-    color: #00ff99;
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
+    align-items: center;
+    min-height: 100vh;
   }
 
   header {
-    background: #111;
-    padding: 15px 30px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     font-family: 'Orbitron', sans-serif;
     font-weight: 900;
-    letter-spacing: 0.15em;
-    font-size: 1.8rem;
+    font-size: 3rem;
     color: #00ff99;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    padding: 20px 0 10px;
+    text-align: center;
+    user-select: none;
   }
 
-  nav ul {
-    list-style: none;
+  /* Conteneur général pour catégorie + produits mis en page */
+  #container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px 40px;
+    gap: 40px;
+  }
+
+  /* Colonne catégorie */
+  #categories {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    min-width: 90px;
+    user-select: none;
+  }
+
+  #categories div {
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #00ff99;
+    border: 2px solid #00ff99;
+    border-radius: 14px;
+    padding: 6px 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  #categories div:hover,
+  #categories .active {
+    background-color: #00ff99;
+    color: #121212;
+  }
+
+  /* Zone produits d'aperçu à droite de la colonne */
+  #preview-products {
+    flex-grow: 1;
     display: flex;
     gap: 20px;
-    margin: 0; padding: 0;
-  }
-  nav ul li {
-    cursor: pointer;
-    font-weight: 700;
-  }
-  nav ul li:hover {
-    color: #33ffb1;
+    flex-wrap: wrap;
   }
 
-  main {
-    flex-grow: 1;
-    padding: 25px 20px 60px 20px;
-    max-width: 1200px;
-    margin: auto;
-    width: 100%;
-  }
-
-  h1, h2, h3 {
-    color: #00ff99;
-    margin-top: 0;
-  }
-
-  /* Produits */
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
-    gap: 25px;
-    margin-top: 20px;
-  }
+  /* Carte produit */
   .product-card {
     background: #1f1f1f;
     border-radius: 12px;
     box-shadow: 0 0 15px #00ff99aa;
-    padding: 20px;
+    padding: 15px;
+    width: 150px;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: transform 0.2s ease;
   }
-  .product-card h3 {
-    margin: 0 0 10px;
+  .product-card:hover {
+    transform: scale(1.05);
   }
-  .product-desc {
-    flex-grow: 1;
-    color: #ccc;
-    font-size: 0.95rem;
-    line-height: 1.3;
+  .product-name {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-top: 10px;
+    color: #00ff99;
+    text-align: center;
   }
   .product-price {
-    margin: 15px 0 10px;
+    margin-top: 8px;
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
   }
 
-  .product-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-  }
-
-  select.qty-select {
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: none;
-    background: #333;
-    color: #eee;
-    font-size: 1rem;
-    width: 90px;
-  }
-
-  button.add-cart-btn {
-    background: #00ff99;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 14px;
-    color: #121212;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    flex-shrink: 0;
-  }
-  button.add-cart-btn:hover {
-    background: #33ffaa;
-  }
-
-  /* Panier */
-  #cart-btn {
-    position: fixed;
-    top: 15px;
-    right: 20px;
-    background: #00ff99;
-    border: none;
-    border-radius: 50%;
-    width: 50px; height: 50px;
-    cursor: pointer;
-    font-weight: 900;
-    font-size: 1.4rem;
-    color: #121212;
-    box-shadow: 0 0 10px #00ff99bb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1100;
-  }
-  #cart-count {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: #ff0055;
-    color: white;
-    border-radius: 50%;
-    width: 20px; height: 20px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Modal panier */
-  #cart-modal {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.85);
+  /* Section complète produits par catégorie (initialement cachée) */
+  #category-page {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
     display: none;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 1200;
-  }
-  #cart-modal.active {
-    display: flex;
-  }
-  #cart-content {
-    background: #222;
-    border-radius: 14px;
-    width: 90vw;
-    max-width: 550px;
-    max-height: 80vh;
-    overflow-y: auto;
-    padding: 20px;
-    color: #eee;
-    display: flex;
-    flex-direction: column;
   }
 
-  #cart-header {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 15px;
+  #category-page h2 {
     color: #00ff99;
-  }
-  #cart-items {
-    flex-grow: 1;
-    overflow-y: auto;
-    margin-bottom: 15px;
-  }
-  .cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    border-bottom: 1px solid #333;
-    padding-bottom: 8px;
-  }
-  .cart-item-name {
-    flex-grow: 1;
-  }
-  .cart-item-qty {
-    width: 60px;
-    margin: 0 10px;
-  }
-  .cart-item-price {
-    font-weight: 700;
-    min-width: 70px;
-    text-align: right;
-  }
-  .cart-item-remove {
-    background: none;
-    border: none;
-    color: #ff4455;
-    cursor: pointer;
-    font-size: 1.2rem;
-    margin-left: 10px;
+    margin-bottom: 20px;
+    user-select: none;
   }
 
-  #cart-total {
-    font-weight: 700;
-    font-size: 1.3rem;
-    text-align: right;
-    margin-bottom: 15px;
+  #category-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 20px;
   }
 
-  #close-cart {
-    align-self: flex-end;
+  /* Bouton retour */
+  #back-btn {
+    align-self: flex-start;
     background: #00ff99;
     border: none;
-    padding: 6px 14px;
-    border-radius: 8px;
-    cursor: pointer;
+    border-radius: 10px;
+    padding: 8px 16px;
     color: #121212;
     font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 20px;
+    user-select: none;
   }
-  #close-cart:hover {
+  #back-btn:hover {
     background: #33ffaa;
-  }
-
-  /* Paypal container */
-  #paypal-button-container {
-    margin-top: 10px;
-    align-self: flex-end;
   }
 
   /* Responsive */
-  @media (max-width: 600px) {
-    header {
+  @media (max-width: 700px) {
+    #container {
       flex-direction: column;
-      gap: 10px;
-      font-size: 1.4rem;
+      align-items: center;
+      padding: 0 10px 30px;
     }
-    nav ul {
-      flex-wrap: wrap;
+    #categories {
+      flex-direction: row;
+      gap: 10px;
+      min-width: auto;
+      margin-bottom: 20px;
+    }
+    #categories div {
+      font-size: 1.2rem;
+      padding: 6px 10px;
+    }
+    #preview-products {
       justify-content: center;
-      gap: 10px;
     }
-    #cart-content {
-      max-width: 95vw;
-      max-height: 70vh;
+    #category-products {
+      grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
     }
   }
-
 </style>
 </head>
 <body>
 
-<header>
-  <div>CROSSPUFFS</div>
-  <nav>
-    <ul>
-      <li data-category="accueil">Accueil</li>
-      <li data-category="9k">Vapes jetables 9000 puffs</li>
-      <li data-category="10k">Vapes jetables 10000 puffs</li>
-      <li data-category="12k">Vapes jetables 12000-13000 puffs</li>
-      <li data-category="15k">Vapes jetables 15000-16000 puffs</li>
-      <li data-category="18k">Vapes jetables 18000-20000+ puffs</li>
-    </ul>
-  </nav>
-</header>
+<header>CROSSPUFFS</header>
 
-<main id="content">
-  <!-- Le contenu change ici dynamiquement -->
-  <section id="accueil-section">
-    <h1>Bienvenue chez CROSSPUFFS</h1>
-    <p>Découvrez nos meilleures vapes jetables en gros, classées par autonomie pour répondre à tous vos besoins.</p>
-  </section>
-</main>
+<div id="container">
 
-<button id="cart-btn" aria-label="Afficher le panier">
-  🛒<span id="cart-count" style="display:none">0</span>
-</button>
+  <div id="categories">
+    <div data-cat="9k">( 9k )</div>
+    <div data-cat="10k">( 10k )</div>
+    <div data-cat="12k">( 12k-13k )</div>
+    <div data-cat="15k">( 15k-16k )</div>
+    <div data-cat="18k">( 18k-20k+ )</div>
+  </div>
 
-<!-- Modal panier -->
-<div id="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cart-header">
-  <div id="cart-content">
-    <div id="cart-header">Votre panier</div>
-    <div id="cart-items"></div>
-    <div id="cart-total">Total : 0,00 €</div>
-    <div id="paypal-button-container"></div>
-    <button id="close-cart">Fermer</button>
+  <div id="preview-products">
+    <!-- Premier produit de chaque catégorie affiché ici -->
   </div>
 </div>
 
-<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=EUR"></script>
+<!-- Page catégorie complète -->
+<section id="category-page">
+  <button id="back-btn">← Retour</button>
+  <h2 id="category-title"></h2>
+  <div id="category-products"></div>
+</section>
 
 <script>
-// Données produits par catégorie
+// Données produits (exemple avec 2-3 produits par catégorie pour démonstration)
 const productsData = {
   "9k": [
-    {id: 'randm-9000', name:"RandM Tornado 9000", desc:"~9000 bouffées, format compact", price: 45},
-    {id: 'sunfire-9000', name:"Sunfire Tornado 9000", desc:"~9000 bouffées, design premium", price: 45},
-    {id: 'tornado-puff-9000', name:"Tornado Puff 9000 (OEM)", desc:"~9000 bouffées, double arôme", price: 45},
-    {id: 'vapen-mars-9000', name:"VAPEN Mars 9000", desc:"~9000 bouffées, saveur intense", price: 45},
-    {id: 'enjoy-ultra-9000', name:"Enjoy Ultra 9000", desc:"~9000 bouffées, léger et puissant", price: 45},
-    {id: 'chrome-bar-9000', name:"Chrome Bar 9000 Puff Disposable", desc:"~9000 bouffées, style chrome", price: 45},
-    {id: 'snowwolf-9000', name:"Snowwolf 9000 (jetable rechargeable)", desc:"~9000 bouffées, rechargeable", price: 45},
-    {id: 'feelm-max-9000', name:"Feelm Max 9000 Puff", desc:"~9000 bouffées, modèles personnalisés", price: 45}
+    {id: 'randm-9000', name:"RandM Tornado 9000", price: 45},
+    {id: 'sunfire-9000', name:"Sunfire Tornado 9000", price: 45},
+    {id: 'tornado-puff-9000', name:"Tornado Puff 9000 (OEM)", price: 45},
   ],
   "10k": [
-    {id: 'oxbar-10k', name:"OXBAR Magic Maze Pro", desc:"~10000 bouffées, écran LCD", price: 55},
-    {id: 'chillax-neo-x', name:"Chillax Neo X", desc:"~10000 bouffées, airflow réglable", price: 55},
-    {id: 'snowwolf-smart-10k', name:"Snowwolf Smart 10K", desc:"~10000 bouffées, variante HD", price: 55},
-    {id: 'geek-bar-pulse-x', name:"Geek Bar Pulse X", desc:"~10000 bouffées, utilisation flexible", price: 55},
-    {id: 'waka-smash-10k', name:"Waka Smash 10K", desc:"~10000 bouffées, écran LED", price: 55}
+    {id: 'oxbar-10k', name:"OXBAR Magic Maze Pro", price: 55},
+    {id: 'chillax-neo-x', name:"Chillax Neo X", price: 55},
   ],
   "12k": [
-    {id: 'komodo-v-mod-12k', name:"Komodo V-Mod 12K", desc:"~12000 bouffées, longue autonomie", price: 60},
-    {id: 'randm-tornado-12k', name:"RandM Tornado 12K", desc:"~12000 bouffées, format amélioré", price: 60},
-    {id: 'vp-pro-13k', name:"VP PRO 13K", desc:"~13000 bouffées, saveur durable", price: 60},
-    {id: 'lost-vape-orion-bar-13k', name:"Lost Vape Orion Bar 13K", desc:"~13000 bouffées, design soigné", price: 60},
-    {id: 'zovoo-dragbar-z7000', name:"ZOVOO Dragbar Z7000 Pro", desc:"7K–13K bouffées selon usage", price: 60}
+    {id: 'komodo-v-mod-12k', name:"Komodo V-Mod 12K", price: 60},
+    {id: 'randm-tornado-12k', name:"RandM Tornado 12K", price: 60},
   ],
   "15k": [
-    {id: 'lost-mary-mt-15k', name:"Lost Mary MT 15K Turbo", desc:"~15000 bouffées, turbo mode", price: 65},
-    {id: 'snowwolf-smart-hd', name:"Snowwolf Smart HD", desc:"~15000 bouffées, écran LCD", price: 65},
-    {id: 'randm-tornado-15k', name:"RandM Tornado 15K", desc:"~15000 bouffées, grande version", price: 65},
-    {id: 'savage-monster-whiskey-16k', name:"Savage Monster Whiskey 16K", desc:"~16000 bouffées, saveurs fortes", price: 65},
-    {id: 'vp-pro-16k', name:"VP PRO 16K", desc:"~16000 bouffées, usage pro", price: 65}
+    {id: 'lost-mary-mt-15k', name:"Lost Mary MT 15K Turbo", price: 65},
+    {id: 'snowwolf-smart-hd', name:"Snowwolf Smart HD", price: 65},
   ],
   "18k": [
-    {id: 'randm-tornado-18k', name:"RandM Tornado 18K", desc:"
+    {id: 'randm-tornado-18k', name:"RandM Tornado 18K", price: 70},
+    {id: 'zovoo-dragbar-20k', name:"ZOVOO Dragbar 20K+", price: 75},
+  ]
+};
+
+const categoriesElems = document.querySelectorAll('#categories div');
+const previewContainer = document.getElementById('preview-products');
+const categoryPage = document.getElementById('category-page');
+const container = document.getElementById('container');
+const categoryTitle = document.getElementById('category-title');
+const categoryProducts = document.getElementById('category-products');
+const backBtn = document.getElementById('back-btn');
+
+function clearActiveCategory() {
+  categoriesElems.forEach(el => el.classList.remove('active'));
+}
+
+// Affiche le premier produit de chaque catégorie dans preview
+function showPreviewProducts() {
+  previewContainer.innerHTML = '';
+  for(const cat in productsData){
+    const prod = productsData[cat][0];
+    if(!prod) continue;
+    const card = createProductCard(prod);
+    card.onclick = () => openCategory(cat);
+    previewContainer.appendChild(card);
+  }
+}
+
+// Crée une carte produit simple
+function createProductCard(product){
+  const card = document.createElement('div');
+  card.className = 'product-card';
+  card.title = product.name + ' - ' + product.price + ' €';
+  card.innerHTML = `
+    <div class="product-name">${product.name}</div>
+    <div class="product-price">${product.price} €</div>
+  `;
+  return card;
+}
+
+// Ouvre la page catégorie complète
+function openCategory(cat){
+  clearActiveCategory();
+  const catElem = [...categoriesElems].find(e => e.dataset.cat === cat);
+  if(catElem) catElem.classList.add('active');
+
+  // Cache la partie preview, affiche la page catégorie
+  container.style.display = 'none';
+  categoryPage.style.display = 'flex';
+
+  categoryTitle.textContent = `( ${cat} ) - Produits`;
+  categoryProducts.innerHTML = '';
+
+  productsData[cat].forEach(prod => {
+    const card = createProductCard(prod);
+    categoryProducts.appendChild(card);
+  });
+}
+
+// Retour à la preview
+backBtn.onclick = () => {
+  categoryPage.style.display = 'none';
+  container.style.display = 'flex';
+  clearActiveCategory();
+};
+
+// Ajout click sur catégories pour ouvrir page complète
+categoriesElems.forEach(elem => {
+  elem.addEventListener('click', () => openCategory(elem.dataset.cat));
+});
+
+// Initialisation
+showPreviewProducts();
+</script>
+
+</body>
+</html>
