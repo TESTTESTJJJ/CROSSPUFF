@@ -5,233 +5,355 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>CROSSPUFFS - Vente de puffs en gros</title>
 <style>
-body {
-background: #121212;
-color: white;
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-margin: 0; padding: 20px;
-}
-header {
-text-align: center;
-font-size: 2.5rem;
-font-weight: 900;
-color: white;
-letter-spacing: 0.15em;
-margin-bottom: 40px;
-font-family: 'Orbitron', sans-serif; /* style techno */
-}
-.products-container {
-display: flex;
-flex-wrap: wrap;
-gap: 25px;
-justify-content: center;
-}
-.product {
-background: #1f1f1f;
-border-radius: 12px;
-box-shadow: 0 0 12px #00ff99aa;
-padding: 20px;
-max-width: 320px;
-flex: 1 1 300px;
-}
-.product h2 {
-margin-top: 0;
-font-size: 1.7rem;
-color: #00ff99;
-}
-.product p {
-line-height: 1.4;
-font-size: 0.95rem;
-color: #ccc;
-}
-.price-info {
-font-weight: 700;
-margin-top: 12px;
-font-size: 1.1rem;
-color: #fff;
-}
-label, select {
-margin-top: 10px;
-display: block;
-font-weight: 600;
-}
-select {
-margin-bottom: 10px;
-width: 100%;
-padding: 8px 10px;
-border-radius: 6px;
-border: none;
-font-size: 1rem;
-background: #333;
-color: white;
-}
-.total {
-font-weight: 700;
-font-size: 1.1rem;
-margin-bottom: 15px;
-color: #00ff99;
-}
-.paypal-button-container {
-margin-top: 8px;
-}
+  /* Reset basique */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    color: #eee;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  a {
+    color: #00ff99;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  header {
+    background: #111;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    font-size: 1.8rem;
+    color: #00ff99;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0; padding: 0;
+  }
+  nav ul li {
+    cursor: pointer;
+    font-weight: 700;
+  }
+  nav ul li:hover {
+    color: #33ffb1;
+  }
+
+  main {
+    flex-grow: 1;
+    padding: 25px 20px 60px 20px;
+    max-width: 1200px;
+    margin: auto;
+    width: 100%;
+  }
+
+  h1, h2, h3 {
+    color: #00ff99;
+    margin-top: 0;
+  }
+
+  /* Produits */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 25px;
+    margin-top: 20px;
+  }
+  .product-card {
+    background: #1f1f1f;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #00ff99aa;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .product-card h3 {
+    margin: 0 0 10px;
+  }
+  .product-desc {
+    flex-grow: 1;
+    color: #ccc;
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+  .product-price {
+    margin: 15px 0 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .product-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  select.qty-select {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: none;
+    background: #333;
+    color: #eee;
+    font-size: 1rem;
+    width: 90px;
+  }
+
+  button.add-cart-btn {
+    background: #00ff99;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: #121212;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    flex-shrink: 0;
+  }
+  button.add-cart-btn:hover {
+    background: #33ffaa;
+  }
+
+  /* Panier */
+  #cart-btn {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    background: #00ff99;
+    border: none;
+    border-radius: 50%;
+    width: 50px; height: 50px;
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 1.4rem;
+    color: #121212;
+    box-shadow: 0 0 10px #00ff99bb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1100;
+  }
+  #cart-count {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #ff0055;
+    color: white;
+    border-radius: 50%;
+    width: 20px; height: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Modal panier */
+  #cart-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1200;
+  }
+  #cart-modal.active {
+    display: flex;
+  }
+  #cart-content {
+    background: #222;
+    border-radius: 14px;
+    width: 90vw;
+    max-width: 550px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 20px;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #cart-header {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #00ff99;
+  }
+  #cart-items {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 15px;
+  }
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 8px;
+  }
+  .cart-item-name {
+    flex-grow: 1;
+  }
+  .cart-item-qty {
+    width: 60px;
+    margin: 0 10px;
+  }
+  .cart-item-price {
+    font-weight: 700;
+    min-width: 70px;
+    text-align: right;
+  }
+  .cart-item-remove {
+    background: none;
+    border: none;
+    color: #ff4455;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin-left: 10px;
+  }
+
+  #cart-total {
+    font-weight: 700;
+    font-size: 1.3rem;
+    text-align: right;
+    margin-bottom: 15px;
+  }
+
+  #close-cart {
+    align-self: flex-end;
+    background: #00ff99;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #121212;
+    font-weight: 700;
+  }
+  #close-cart:hover {
+    background: #33ffaa;
+  }
+
+  /* Paypal container */
+  #paypal-button-container {
+    margin-top: 10px;
+    align-self: flex-end;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    header {
+      flex-direction: column;
+      gap: 10px;
+      font-size: 1.4rem;
+    }
+    nav ul {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    #cart-content {
+      max-width: 95vw;
+      max-height: 70vh;
+    }
+  }
+
 </style>
 </head>
 <body>
 
-<header>CROSSPUFFS</header>
+<header>
+  <div>CROSSPUFFS</div>
+  <nav>
+    <ul>
+      <li data-category="accueil">Accueil</li>
+      <li data-category="9k">Vapes jetables 9000 puffs</li>
+      <li data-category="10k">Vapes jetables 10000 puffs</li>
+      <li data-category="12k">Vapes jetables 12000-13000 puffs</li>
+      <li data-category="15k">Vapes jetables 15000-16000 puffs</li>
+      <li data-category="18k">Vapes jetables 18000-20000+ puffs</li>
+    </ul>
+  </nav>
+</header>
 
-<div class="products-container">
+<main id="content">
+  <!-- Le contenu change ici dynamiquement -->
+  <section id="accueil-section">
+    <h1>Bienvenue chez CROSSPUFFS</h1>
+    <p>Découvrez nos meilleures vapes jetables en gros, classées par autonomie pour répondre à tous vos besoins.</p>
+  </section>
+</main>
 
-<!-- PRODUITS AUTONOMIE -->
-<div class="product" data-baseprice="45">
-<h2>Puff 9K</h2>
-<p>9000 bouffées – Jetable rechargeable – Port USB-C<br>Double arôme – Format compact – Saveur intense</p>
-<p class="price-info">Prix : 45 € / carton de 10</p>
-<label for="qty-puff9k">Quantité :</label>
-<select id="qty-puff9k" class="qty-select">
-<option value="1">1 carton</option>
-<option value="3">3 cartons (-10%)</option>
-<option value="5">5 cartons (-11%)</option>
-<option value="10">10 cartons (-18%) + 1 offert</option>
-</select>
-<p class="total">Total : <span id="total-puff9k">45.00</span> €</p>
-<div id="paypal-button-puff9k" class="paypal-button-container"></div>
-</div>
+<button id="cart-btn" aria-label="Afficher le panier">
+  🛒<span id="cart-count" style="display:none">0</span>
+</button>
 
-<div class="product" data-baseprice="45">
-<h2>Puff 15K</h2>
-<p>15000 bouffées – Écran LCD – Airflow réglable<br>Port USB-C – Saveurs longues durée – Rechargeable</p>
-<p class="price-info">Prix : 45 € / carton de 10</p>
-<label for="qty-puff15k">Quantité :</label>
-<select id="qty-puff15k" class="qty-select">
-<option value="1">1 carton</option>
-<option value="3">3 cartons (-10%)</option>
-<option value="5">5 cartons (-11%)</option>
-<option value="10">10 cartons (-18%) + 1 offert</option>
-</select>
-<p class="total">Total : <span id="total-puff15k">45.00</span> €</p>
-<div id="paypal-button-puff15k" class="paypal-button-container"></div>
-</div>
-
-<div class="product" data-baseprice="45">
-<h2>Puff 22K</h2>
-<p>22000 bouffées – Autonomie extrême – Format box lumineux<br>Saveurs explosives – Port USB-C – Rechargeable</p>
-<p class="price-info">Prix : 45 € / carton de 10</p>
-<label for="qty-puff22k">Quantité :</label>
-<select id="qty-puff22k" class="qty-select">
-<option value="1">1 carton</option>
-<option value="3">3 cartons (-10%)</option>
-<option value="5">5 cartons (-11%)</option>
-<option value="10">10 cartons (-18%) + 1 offert</option>
-</select>
-<p class="total">Total : <span id="total-puff22k">45.00</span> €</p>
-<div id="paypal-button-puff22k" class="paypal-button-container"></div>
-</div>
-
-<!-- PRODUITS GOÛT -->
-<div class="product" data-baseprice="50">
-<h2>Puff Ice Menthe</h2>
-<p>Menthe glaciale – Format stick fin – Jetable<br>Sans nicotine – Design LED lumineux</p>
-<p class="price-info">Prix : 50 € / carton de 10</p>
-<label for="qty-puffice">Quantité :</label>
-<select id="qty-puffice" class="qty-select">
-<option value="1">1 carton</option>
-<option value="3">3 cartons (-10%)</option>
-<option value="5">5 cartons (-11%)</option>
-<option value="10">10 cartons (-18%) + 1 offert</option>
-</select>
-<p class="total">Total : <span id="total-puffice">50.00</span> €</p>
-<div id="paypal-button-puffice" class="paypal-button-container"></div>
-</div>
-
-<div class="product" data-baseprice="50">
-<h2>Puff Mangue</h2>
-<p>Saveur mangue sucrée – Format box rechargeable<br>Recharge USB-C – Saveur intense et durable</p>
-<p class="price-info">Prix : 50 € / carton de 10</p>
-<label for="qty-puffmangue">Quantité :</label>
-<select id="qty-puffmangue" class="qty-select">
-<option value="1">1 carton</option>
-<option value="3">3 cartons (-10%)</option>
-<option value="5">5 cartons (-11%)</option>
-<option value="10">10 cartons (-18%) + 1 offert</option>
-</select>
-<p class="total">Total : <span id="total-puffmangue">50.00</span> €</p>
-<div id="paypal-button-puffmangue" class="paypal-button-container"></div>
-</div>
-
-<!-- PRODUITS NICOTINE -->
-<div class="product" data-baseprice="40">
-<h2>Puff Sans Nicotine</h2>
-<p>1200 bouffées – Format box rechargeable – Saveur fruits rouges<br>0 mg nicotine – Recharge USB-C – Usage multiple</p>
-<p class="price-info">Prix : 40 € / carton de 10</p>
-<label for="qty-puffnicotine">Quantité :</label>
-<select id="qty-puffnicotine" class="qty-select">
-<option value="1">1 carton</option>
-<option value="3">3 cartons (-10%)</option>
-<option value="5">5 cartons (-11%)</option>
-<option value="10">10 cartons (-18%) + 1 offert</option>
-</select>
-<p class="total">Total : <span id="total-puffnicotine">40.00</span> €</p>
-<div id="paypal-button-puffnicotine" class="paypal-button-container"></div>
-</div>
-
+<!-- Modal panier -->
+<div id="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cart-header">
+  <div id="cart-content">
+    <div id="cart-header">Votre panier</div>
+    <div id="cart-items"></div>
+    <div id="cart-total">Total : 0,00 €</div>
+    <div id="paypal-button-container"></div>
+    <button id="close-cart">Fermer</button>
+  </div>
 </div>
 
 <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=EUR"></script>
 
 <script>
-// Fonction pour calculer prix avec remise
-function calculatePrice(basePrice, qty) {
-if (qty >= 10) return basePrice * qty * 0.82; // -18% + 1 offert inclus (offre spéciale)
-if (qty >= 5) return basePrice * qty * 0.89; // -11%
-if (qty >= 3) return basePrice * qty * 0.90; // -10%
-return basePrice * qty;
-}
-
-function setupProduct(qtyId, totalId, paypalId, productName, basePrice) {
-const qtySelect = document.getElementById(qtyId);
-const totalSpan = document.getElementById(totalId);
-let currentQty = parseInt(qtySelect.value);
-
-function updateTotal() {
-currentQty = parseInt(qtySelect.value);
-let total = calculatePrice(basePrice, currentQty);
-totalSpan.textContent = total.toFixed(2);
-}
-
-qtySelect.addEventListener("change", updateTotal);
-updateTotal();
-
-// Config PayPal Button
-paypal.Buttons({
-style: { layout: 'vertical', color: 'green', shape: 'rect', label: 'pay' },
-createOrder: function(data, actions) {
-return actions.order.create({
-purchase_units: [{
-description: productName,
-amount: {
-currency_code: "EUR",
-value: calculatePrice(basePrice, parseInt(qtySelect.value)).toFixed(2)
-}
-}]
-});
-},
-onApprove: function(data, actions) {
-return actions.order.capture().then(function(details) {
-alert("Merci pour votre achat, " + details.payer.name.given_name + " !");
-});
-}
-}).render('#' + paypalId);
-}
-
-// Initialisation de tous les produits
-setupProduct("qty-puff9k", "total-puff9k", "paypal-button-puff9k", "Puff 9K", 45);
-setupProduct("qty-puff15k", "total-puff15k", "paypal-button-puff15k", "Puff 15K", 45);
-setupProduct("qty-puff22k", "total-puff22k", "paypal-button-puff22k", "Puff 22K", 45);
-setupProduct("qty-puffice", "total-puffice", "paypal-button-puffice", "Puff Ice Menthe", 50);
-setupProduct("qty-puffmangue", "total-puffmangue", "paypal-button-puffmangue", "Puff Mangue", 50);
-setupProduct("qty-puffnicotine", "total-puffnicotine", "paypal-button-puffnicotine", "Puff Sans Nicotine", 40);
-</script>
-
-</body>
-</html>
+// Données produits par catégorie
+const productsData = {
+  "9k": [
+    {id: 'randm-9000', name:"RandM Tornado 9000", desc:"~9000 bouffées, format compact", price: 45},
+    {id: 'sunfire-9000', name:"Sunfire Tornado 9000", desc:"~9000 bouffées, design premium", price: 45},
+    {id: 'tornado-puff-9000', name:"Tornado Puff 9000 (OEM)", desc:"~9000 bouffées, double arôme", price: 45},
+    {id: 'vapen-mars-9000', name:"VAPEN Mars 9000", desc:"~9000 bouffées, saveur intense", price: 45},
+    {id: 'enjoy-ultra-9000', name:"Enjoy Ultra 9000", desc:"~9000 bouffées, léger et puissant", price: 45},
+    {id: 'chrome-bar-9000', name:"Chrome Bar 9000 Puff Disposable", desc:"~9000 bouffées, style chrome", price: 45},
+    {id: 'snowwolf-9000', name:"Snowwolf 9000 (jetable rechargeable)", desc:"~9000 bouffées, rechargeable", price: 45},
+    {id: 'feelm-max-9000', name:"Feelm Max 9000 Puff", desc:"~9000 bouffées, modèles personnalisés", price: 45}
+  ],
+  "10k": [
+    {id: 'oxbar-10k', name:"OXBAR Magic Maze Pro", desc:"~10000 bouffées, écran LCD", price: 55},
+    {id: 'chillax-neo-x', name:"Chillax Neo X", desc:"~10000 bouffées, airflow réglable", price: 55},
+    {id: 'snowwolf-smart-10k', name:"Snowwolf Smart 10K", desc:"~10000 bouffées, variante HD", price: 55},
+    {id: 'geek-bar-pulse-x', name:"Geek Bar Pulse X", desc:"~10000 bouffées, utilisation flexible", price: 55},
+    {id: 'waka-smash-10k', name:"Waka Smash 10K", desc:"~10000 bouffées, écran LED", price: 55}
+  ],
+  "12k": [
+    {id: 'komodo-v-mod-12k', name:"Komodo V-Mod 12K", desc:"~12000 bouffées, longue autonomie", price: 60},
+    {id: 'randm-tornado-12k', name:"RandM Tornado 12K", desc:"~12000 bouffées, format amélioré", price: 60},
+    {id: 'vp-pro-13k', name:"VP PRO 13K", desc:"~13000 bouffées, saveur durable", price: 60},
+    {id: 'lost-vape-orion-bar-13k', name:"Lost Vape Orion Bar 13K", desc:"~13000 bouffées, design soigné", price: 60},
+    {id: 'zovoo-dragbar-z7000', name:"ZOVOO Dragbar Z7000 Pro", desc:"7K–13K bouffées selon usage", price: 60}
+  ],
+  "15k": [
+    {id: 'lost-mary-mt-15k', name:"Lost Mary MT 15K Turbo", desc:"~15000 bouffées, turbo mode", price: 65},
+    {id: 'snowwolf-smart-hd', name:"Snowwolf Smart HD", desc:"~15000 bouffées, écran LCD", price: 65},
+    {id: 'randm-tornado-15k', name:"RandM Tornado 15K", desc:"~15000 bouffées, grande version", price: 65},
+    {id: 'savage-monster-whiskey-16k', name:"Savage Monster Whiskey 16K", desc:"~16000 bouffées, saveurs fortes", price: 65},
+    {id: 'vp-pro-16k', name:"VP PRO 16K", desc:"~16000 bouffées, usage pro", price: 65}
+  ],
+  "18k": [
+    {id: 'randm-tornado-18k', name:"RandM Tornado 18K", desc:"
